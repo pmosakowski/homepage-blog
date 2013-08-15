@@ -17,15 +17,18 @@ class VisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000')
         self.assertIn('Homepage', self.browser.title)
 
-        self.fail('Finish the test!')
-
         # Ramon searches for main navigation bar
 
         # Ramon looks for a link to about page
         # clicks it
+        about_link = self.browser.find_element_by_link_text('About')
+        about_link.click()
 
         # new page loads
         # it displays placeholder page descritption
+        self.assertIn('About', self.browser.title)
+        
+        self.fail('Finish the test!')
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
