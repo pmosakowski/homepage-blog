@@ -18,7 +18,7 @@ class VisitorTest(unittest.TestCase):
         self.assertIn('Homepage', self.browser.title)
 
         # Ramon searches for main navigation bar
-        main_menu = self.browser.find_element_by_id('main_menu')
+        main_menu = self.browser.find_element_by_id('main-menu')
 
         # Ramon looks for a link to about page
         # clicks it
@@ -27,7 +27,7 @@ class VisitorTest(unittest.TestCase):
 
         # new page loads
         # it displays placeholder page description
-        document_header = find_element_by_tag_name('h1')
+        document_header = self.browser.find_element_by_tag_name('h1')
         self.assertIn('About this page', document_header.text)
         
         self.fail('Finish the test!')
