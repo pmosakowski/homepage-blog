@@ -15,7 +15,7 @@ class HomePageTest(TestCase):
         request = HttpRequest() 
         response = main_page(request) 
 
-        expected_html = render_to_string('base.html')
+        expected_html = render_to_string('mainpage.html')
         self.assertEqual(response.content.decode(), expected_html)
 
     def test_about_url_resolves_to_main_page_view(self):
