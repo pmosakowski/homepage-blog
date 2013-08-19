@@ -1,10 +1,12 @@
 <html>
     <head>
-        <title>Homepage</title>
+        {% block title %}
+        {% endblock %}
     </head>
     <body>
-        <div id="main-menu">
-            <a id="about" href="about">About</a>
-        </div>
+        {% block menu %}
+        {% endblock %}
+        {% block content %}
+        {% endblock %}
     </body>
 </html>
