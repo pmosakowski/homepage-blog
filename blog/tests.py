@@ -4,7 +4,7 @@ from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
-from blog.views import blog_main
+from blog.views import blog_main, new_post
 
 class BlogTest(TestCase):
 
@@ -24,3 +24,20 @@ class BlogTest(TestCase):
         response = self.client.get('/blog')
         
         self.assertTemplateUsed(response, 'mainpage/base.html')
+
+    def test_blog_view_has_new_post_link(self):
+        response = self.client.get('/blog')
+
+        self.assertContains(response, '<a href="/blog/new-post">New post',
+                status_code=200, html=True)
+
+    def test_new_post_url_resolves_to_new_post_view(self):
+        found = resolve('/blog/new-post')
+
+        self.assertEqual(found.func, new_post)
+
+    def test_new_post_view_returns_correct_html(self):
+        response = self.client.get('/blog/new-post')
+        
+        expected_html = render_to_string('blog/new-post.html')
+        self.assertEqual(response.content.decode(), expected_html)

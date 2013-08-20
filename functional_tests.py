@@ -34,5 +34,15 @@ class VisitorTest(unittest.TestCase):
         self.browser.get('http://localhost:8000/blog')
         self.assertIn('Blog', self.browser.title)
 
+        add_post_link = self.browser.find_element_by_link_text('New post')
+        add_post_link.click()
+
+        # new page loads
+        # it displays placeholder page description
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Add new post', page_body.text)
+
+        self.fail('Finish the test!')
+
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
