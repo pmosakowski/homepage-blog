@@ -29,8 +29,10 @@ class VisitorTest(unittest.TestCase):
         # it displays placeholder page description
         document_header = self.browser.find_element_by_tag_name('h1')
         self.assertIn('About this page', document_header.text)
-        
-        self.fail('Finish the test!')
+
+    def test_user_adds_new_post(self):
+        self.browser.get('http://localhost:8000/blog')
+        self.assertIn('Blog', self.browser.title)
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

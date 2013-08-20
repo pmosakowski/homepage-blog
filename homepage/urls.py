@@ -7,7 +7,9 @@ from django.conf.urls import patterns, include, url
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'mainpage.views.main_page', name='home'),
-    url(r'^about', 'mainpage.views.about_page', name='about'),
+    url(r'^about$', 'mainpage.views.about_page', name='about'),
+
+    url(r'^blog', include('blog.urls')),
     # url(r'^homepage/', include('homepage.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
