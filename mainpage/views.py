@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
 def main_page(request):
-    return render(request,'mainpage.html')
+    return render(request,'mainpage/main.html')
 
 def about_page(request):
-    return render(request,'about.html')
+    return render(request,'mainpage/about.html')

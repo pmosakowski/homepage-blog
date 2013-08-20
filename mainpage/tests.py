@@ -15,19 +15,19 @@ class HomePageTest(TestCase):
         request = HttpRequest() 
         response = main_page(request) 
 
-        expected_html = render_to_string('mainpage.html')
+        expected_html = render_to_string('mainpage/main.html')
         self.assertEqual(response.content.decode(), expected_html)
 
     def test_main_view_inherits_base_template(self):
         response = self.client.get('/')
         
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,'base.html')
+        self.assertTemplateUsed(response,'mainpage/base.html')
 
     def test_main_view_displays_main_menu_template(self):
         response = self.client.get('/')
         
-        self.assertTemplateUsed(response,'mainmenu.html')
+        self.assertTemplateUsed(response,'mainpage/mainmenu.html')
     
     def test_main_menu_contains_about_link(self):
         response = self.client.get('/')
@@ -42,5 +42,5 @@ class HomePageTest(TestCase):
         request = HttpRequest() 
         response = about_page(request) 
 
-        expected_html = render_to_string('about.html')
+        expected_html = render_to_string('mainpage/about.html')
         self.assertEqual(response.content.decode(), expected_html)
