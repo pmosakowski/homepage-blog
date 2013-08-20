@@ -24,6 +24,16 @@ class HomePageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,'base.html')
 
+    def test_main_view_displays_main_menu_template(self):
+        response = self.client.get('/')
+        
+        self.assertTemplateUsed(response,'mainmenu.html')
+    
+    def test_main_menu_contains_about_link(self):
+        response = self.client.get('/')
+        self.assertContains(response, '<div id="main-menu"><a href="about">About',
+                status_code=200, html=True)
+
     def test_about_url_resolves_to_main_page_view(self):
         found = resolve('/about')
         self.assertEqual(found.func, about_page)

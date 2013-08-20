@@ -12,10 +12,10 @@ class VisitorTest(unittest.TestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_visitor_reads_an_about_page(self):
+    def test_visitor_navigates_to_the_about_page(self):
         # Ramon navigates to the page and checks its title
         self.browser.get('http://localhost:8000')
-        self.assertIn('Homepage', self.browser.title)
+        self.assertIn('Mainpage', self.browser.title)
 
         # Ramon searches for main navigation bar
         main_menu = self.browser.find_element_by_id('main-menu')
