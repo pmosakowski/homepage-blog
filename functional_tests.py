@@ -42,6 +42,11 @@ class VisitorTest(unittest.TestCase):
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Add new post', page_body.text)
 
+        post_form = self.browser.find_element_by_id('id_new_post')
+
+        post_form.find_element_by_id('id_post_title')
+        post_form.find_element_by_id('id_post_content')
+
         self.fail('Finish the test!')
 
 if __name__ == '__main__':

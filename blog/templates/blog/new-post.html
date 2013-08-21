@@ -1,7 +1,7 @@
-{% extends 'mainpage/base.html' %}
+{% extends 'blog/main.html' %}
 
 {% block title %}
-    <Title>Blog</title>
+    <Title>Add new post</title>
 {% endblock %}
 
 {% block menu %}
@@ -9,4 +9,7 @@
 {% endblock %}
 
 {% block content %}
+    <form id="id_new_post" method="POST">
+        {{ form.as_p }}
+    </form>
 {% endblock %}
