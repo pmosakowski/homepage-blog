@@ -46,6 +46,7 @@ class NewPostTest(TestCase):
         form = AddNewPostForm()
         expected_html = render_to_string('blog/new-post.html', {'form': form})
         self.assertEqual(response.content.decode(), expected_html)
+        self.assertIn('type="submit"', expected_html)
 
     def test_new_post_view_inherits_from_blog_template(self):
         response = self.client.get('/blog/new-post')
@@ -61,11 +62,18 @@ class NewPostTest(TestCase):
 
     def test_new_post_form_returns_correct_fields(self):
         form = AddNewPostForm()
-
-        title = re.compile('.*id_post_title.*')
-        contents = re.compile('.*id_post_content.*')
         
-        self.assertRegex(form.as_p(),title)
-        self.assertRegex(form.as_p(),contents)
-#    def test_new_post_view_can_process_submissions(self):
+        self.assertIn('id_post_title',form.as_p())
+        self.assertIn('id_post_content',form.as_p())
+
+    def test_new_post_view_can_process_submissions(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['post_title'] = 'A new post title'
+        request.POST['post_content'] = 'Some post content here.'
+
+        response = new_post(request)
+
+        self.assertIn('A new post title', response.content.decode())
+        self.assertIn('Some post content here.', response.content.decode())
 

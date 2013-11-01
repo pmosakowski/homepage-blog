@@ -42,10 +42,15 @@ class VisitorTest(unittest.TestCase):
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Add new post', page_body.text)
 
+        # Fill out the form and submit it
         post_form = self.browser.find_element_by_id('id_new_post')
 
-        post_form.find_element_by_id('id_post_title')
-        post_form.find_element_by_id('id_post_content')
+        title_input = post_form.find_element_by_id('id_post_title')
+        title_input.send_keys("This is an example post!")
+        content_input = post_form.find_element_by_id('id_post_content')
+        content_input.send_keys("Lorem ipsum woodchuck chuck out of luck.")
+
+        post_form.find_element_by_id('submit').click()
 
         self.fail('Finish the test!')
 
