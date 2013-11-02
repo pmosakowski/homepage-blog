@@ -38,7 +38,7 @@ class VisitorTest(unittest.TestCase):
         add_post_link.click()
 
         # new page loads
-        # it displays placeholder page description
+        # it displays a form
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Add new post', page_body.text)
 
@@ -46,13 +46,17 @@ class VisitorTest(unittest.TestCase):
         post_form = self.browser.find_element_by_id('id_new_post')
 
         title_input = post_form.find_element_by_id('id_post_title')
-        title_input.send_keys("This is an example post!")
+        title_input.send_keys('This is an example post!')
         content_input = post_form.find_element_by_id('id_post_content')
-        content_input.send_keys("Lorem ipsum woodchuck chuck out of luck.")
+        content_input.send_keys('Lorem ipsum woodchuck chuck out of luck.')
 
         post_form.find_element_by_id('submit').click()
 
-        self.fail('Finish the test!')
+        # main page loads
+        # it displays our newly submitted post
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('This is an example post!t', page_body.text)
+        self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

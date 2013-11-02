@@ -13,8 +13,12 @@ def new_post(request):
         if form.is_valid(): # All validation rules pass
             # Process the data in form.cleaned_data
             # ...
-            return HttpResponse(request.POST['post_title'] +
-                                request.POST['post_content'])
+            return render(request, 'blog/main.html', 
+                    {'posts': 
+                        {'title': request.POST['post_title'],
+                         'content': form.cleaned_data['post_content']}
+                    }
+            )
             #return HttpResponseRedirect('/blog') # Redirect after POST
     else:
         form = AddNewPostForm() # An unbound form

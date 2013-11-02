@@ -33,6 +33,15 @@ class BlogTest(TestCase):
         self.assertContains(response, '<a href="/blog/new-post">New post',
                 status_code=200, html=True)
 
+    def test_blog_view_displays_post(self):
+        post = {'title': "A title", 'content': "Some content"}
+        posts = [post]
+
+        expected_html = render_to_string('blog/main.html', {'posts' : posts})
+
+        self.assertIn(post['title'], expected_html)
+        self.assertIn(post['content'], expected_html)
+
 class NewPostTest(TestCase):
 
     def test_new_post_url_resolves_to_new_post_view(self):
@@ -66,6 +75,18 @@ class NewPostTest(TestCase):
         self.assertIn('id_post_title',form.as_p())
         self.assertIn('id_post_content',form.as_p())
 
+    def test_new_post_view_displays_POST_data(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['post_title'] = 'A new post title'
+        request.POST['post_content'] = 'Some post content here.'
+
+        expected_html = render_to_string('blog/new-post.html',
+                            {'form' : AddNewPostForm(request.POST)})
+
+        self.assertIn('A new post title', expected_html)
+        self.assertIn('Some post content here.', expected_html)
+    
     def test_new_post_view_can_process_submissions(self):
         request = HttpRequest()
         request.method = 'POST'
@@ -74,6 +95,9 @@ class NewPostTest(TestCase):
 
         response = new_post(request)
 
-        self.assertIn('A new post title', response.content.decode())
-        self.assertIn('Some post content here.', response.content.decode())
+        post = {'title': "A title", 'content': "Some content"}
+        posts = [post]
 
+        expected_html = render_to_string('blog/main.html', {'posts': posts})
+
+        self.assertEqual(response.content.decode(), expected_html)
