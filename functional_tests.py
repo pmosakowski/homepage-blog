@@ -55,7 +55,7 @@ class VisitorTest(unittest.TestCase):
         # main page loads
         # it displays our newly submitted post
         page_body = self.browser.find_element_by_tag_name('body')
-        self.assertIn('This is an example post!t', page_body.text)
+        self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
 if __name__ == '__main__':
