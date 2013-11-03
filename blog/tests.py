@@ -2,6 +2,8 @@ from django.test import TestCase
 import re
 
 from django.core.urlresolvers import resolve
+from django.core.context_processors import csrf
+
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
@@ -51,9 +53,10 @@ class NewPostTest(TestCase):
 
     def test_new_post_view_returns_correct_html(self):
         response = self.client.get('/blog/new-post')
-       
-        form = AddNewPostForm()
-        expected_html = render_to_string('blog/new-post.html', {'form': form})
+
+        # use same context as previous request
+        expected_html = render_to_string('blog/new-post.html',response.context)
+
         self.assertEqual(response.content.decode(), expected_html)
         self.assertIn('type="submit"', expected_html)
 
