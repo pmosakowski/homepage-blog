@@ -45,6 +45,12 @@ class BlogTest(TestCase):
         self.assertIn(post['content'], expected_html)
 
 class NewPostTest(TestCase):
+    def setUp(self):
+        self.example_post = {
+            'post_title': 'A new post title',
+            'post_content': 'Some post content here.'
+        }
+
 
     def test_new_post_url_resolves_to_new_post_view(self):
         found = resolve('/blog/new-post')
@@ -80,12 +86,19 @@ class NewPostTest(TestCase):
     def test_new_post_view_displays_POST_data(self):
         request = HttpRequest()
         request.method = 'POST'
-        request.POST['post_title'] = 'A new post title'
-        request.POST['post_content'] = 'Some post content here.'
+        request.POST.update(self.example_post)
 
         expected_html = render_to_string('blog/new-post.html',
                             {'form' : AddNewPostForm(request.POST)})
 
-        self.assertIn('A new post title', expected_html)
-        self.assertIn('Some post content here.', expected_html)
-    
+        self.assertIn(self.example_post['post_title'], expected_html)
+        self.assertIn(self.example_post['post_content'], expected_html)
+   
+    def test_new_post_view_redirects_on_submission(self):
+        
+        response = self.client.post('/blog/new-post', self.example_post)
+        
+        # do we redirect to /blog ?
+        self.assertEqual(302, response.status_code)
+        self.assertRegex(response._headers.get('location')[1],
+                r"^https?://[-\w]*/blog$")
