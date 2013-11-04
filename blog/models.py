@@ -21,4 +21,10 @@ class PostModelTest(TestCase):
 
         self.assertEqual(len(Post.objects.all()), 1)
 
+    def test_can_retrieve_post_models(self):
 
+        self.post1.save()
+        posts = Post.objects.all()
+
+        self.assertIn("A post title", (post.title for post in posts))
+        self.assertIn("Some content", (post.content for post in posts))
