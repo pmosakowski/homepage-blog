@@ -1,8 +1,8 @@
 from django.db import models
 
 class Post(models.Model):
-    pass
-
+    title = models.CharField(max_length=512)
+    content = models.TextField()
 
 # model tests go here
 from django.test import TestCase
