@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 
 from blog.forms import AddNewPostForm
-
+from blog.models import Post
 
 def blog_main(request):
     return render(request, 'blog/main.html')
@@ -10,6 +10,10 @@ def blog_main(request):
 def new_post(request):
     if request.method == 'POST': 
         form = AddNewPostForm(request.POST) # A form bound to the POST data
+        
+        Post.objects.create(
+                title=request.POST['post_title'],
+                content=request.POST['post_content'])
         if form.is_valid(): # All validation rules pass
             # Process the data in form.cleaned_data
             # ...

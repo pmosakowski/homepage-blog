@@ -9,7 +9,7 @@ from django.template.loader import render_to_string
 
 from blog.views import blog_main, new_post
 from blog.forms import AddNewPostForm
-
+from blog.models import Post
 class BlogTest(TestCase):
 
     def test_blog_url_resolves_to_blog_view(self):
@@ -102,3 +102,22 @@ class NewPostTest(TestCase):
         self.assertEqual(302, response.status_code)
         self.assertRegex(response._headers.get('location')[1],
                 r"^https?://[-\w]*/blog$")
+
+    def test_new_post_view_saves_posts(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST.update(self.example_post)
+        
+        self.assertEqual(Post.objects.all().count(), 0)
+        new_post(request)
+        self.assertEqual(Post.objects.all().count(), 1)
+
+    def test_new_post_view_doesnt_save_empty_posts(self):
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST['post_title'] = ''
+        request.POST['post_content'] = ''
+
+        self.assertEqual(Post.objects.all().count(), 0)
+        new_post(request)
+        self.assertEqual(Post.objects.all().count(), 0)

@@ -15,11 +15,11 @@ class PostModelTest(TestCase):
 
     def test_can_save_post_models(self):
 
-        self.assertEqual(len(Post.objects.all()), 0)
+        self.assertEqual(Post.objects.all().count(), 0)
 
         self.post1.save()
 
-        self.assertEqual(len(Post.objects.all()), 1)
+        self.assertEqual(Post.objects.all().count(), 1)
 
     def test_can_retrieve_post_models(self):
 
