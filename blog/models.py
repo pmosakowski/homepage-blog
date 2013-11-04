@@ -17,10 +17,7 @@ class PostModelTest(TestCase):
 
         self.assertEqual(len(Post.objects.all()), 0)
 
-        post1 = Post()
-        post1.title = "A post title"
-        post1.content = "Some content"
-        post1.save()
+        self.post1.save()
 
         self.assertEqual(len(Post.objects.all()), 1)
 
