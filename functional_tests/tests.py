@@ -1,9 +1,9 @@
 #! /home/mosaq/python-env/python3-django/bin/python
 
+from django.test import LiveServerTestCase
 from selenium import webdriver
-import unittest
 
-class VisitorTest(unittest.TestCase):
+class VisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
@@ -14,7 +14,7 @@ class VisitorTest(unittest.TestCase):
 
     def test_visitor_navigates_to_the_about_page(self):
         # Ramon navigates to the page and checks its title
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
         self.assertIn('Mainpage', self.browser.title)
 
         # Ramon searches for main navigation bar
@@ -31,7 +31,7 @@ class VisitorTest(unittest.TestCase):
         self.assertIn('About this page', document_header.text)
 
     def test_user_adds_new_post(self):
-        self.browser.get('http://localhost:8000/blog')
+        self.browser.get(self.live_server_url + '/blog')
         self.assertIn('Blog', self.browser.title)
 
         add_post_link = self.browser.find_element_by_link_text('New post')
@@ -58,5 +58,8 @@ class VisitorTest(unittest.TestCase):
         self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
+    def test_user_display_full_post_view(self):
+        # user clicks on a post title or slug and displays full post contents
+        self.fail('Finish the test!')
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

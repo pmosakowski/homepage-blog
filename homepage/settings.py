@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'mainpage',
     'blog',
+    'functional_tests',
 )
 
 # A sample logging configuration. The only tangible logging
