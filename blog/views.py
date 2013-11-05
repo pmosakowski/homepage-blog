@@ -5,7 +5,9 @@ from blog.forms import AddNewPostForm
 from blog.models import Post
 
 def blog_main(request):
-    return render(request, 'blog/main.html')
+    posts = Post.objects.all()
+
+    return render(request, 'blog/main.html', {'posts': posts})
 
 def new_post(request):
     if request.method == 'POST': 

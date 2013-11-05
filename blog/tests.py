@@ -44,6 +44,16 @@ class BlogTest(TestCase):
         self.assertIn(post['title'], expected_html)
         self.assertIn(post['content'], expected_html)
 
+    def test_blog_view_can_display_saved_posts(self):
+        Post.objects.create(title='A new post title.',
+                            content='Some post content here.')
+
+        response = blog_main(HttpRequest())
+        
+        self.assertContains(response,'A new post title.')
+        self.assertContains(response,'Some post content here.')
+
+
 class NewPostTest(TestCase):
     def setUp(self):
         self.example_post = {
