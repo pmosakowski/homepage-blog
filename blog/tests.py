@@ -7,9 +7,10 @@ from django.core.context_processors import csrf
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
-from blog.views import blog_main, new_post
+from blog.views import blog_main, new_post, view_post
 from blog.forms import AddNewPostForm
-from blog.models import Post
+from blog.models import Post, title_to_link
+
 class BlogTest(TestCase):
 
     def test_blog_url_resolves_to_blog_view(self):
@@ -56,11 +57,10 @@ class BlogTest(TestCase):
 
 class NewPostTest(TestCase):
     def setUp(self):
-        self.example_post = {
-            'post_title': 'A new post title',
+        self.post_data = {
+            'post_title': 'A new post title!!',
             'post_content': 'Some post content here.'
         }
-
 
     def test_new_post_url_resolves_to_new_post_view(self):
         found = resolve('/blog/new-post')
@@ -96,17 +96,17 @@ class NewPostTest(TestCase):
     def test_new_post_view_displays_POST_data(self):
         request = HttpRequest()
         request.method = 'POST'
-        request.POST.update(self.example_post)
+        request.POST.update(self.post_data)
 
         expected_html = render_to_string('blog/new-post.html',
                             {'form' : AddNewPostForm(request.POST)})
 
-        self.assertIn(self.example_post['post_title'], expected_html)
-        self.assertIn(self.example_post['post_content'], expected_html)
+        self.assertIn(self.post_data['post_title'], expected_html)
+        self.assertIn(self.post_data['post_content'], expected_html)
    
     def test_new_post_view_redirects_on_submission(self):
         
-        response = self.client.post('/blog/new-post', self.example_post)
+        response = self.client.post('/blog/new-post', self.post_data)
         
         # do we redirect to /blog ?
         self.assertEqual(302, response.status_code)
@@ -116,7 +116,7 @@ class NewPostTest(TestCase):
     def test_new_post_view_saves_posts(self):
         request = HttpRequest()
         request.method = 'POST'
-        request.POST.update(self.example_post)
+        request.POST.update(self.post_data)
         
         self.assertEqual(Post.objects.all().count(), 0)
         new_post(request)
@@ -131,3 +131,51 @@ class NewPostTest(TestCase):
         self.assertEqual(Post.objects.all().count(), 0)
         new_post(request)
         self.assertEqual(Post.objects.all().count(), 0)
+
+class PostViewTest(TestCase):
+    def setUp(self):
+        self.post_data = {
+            'post_title': 'A new post title!!',
+            'post_content': 'Some post content here.'
+        }
+        
+        self.post_object = Post(title=self.post_data['post_title'],
+                content=self.post_data['post_content'],
+                link=title_to_link(self.post_data['post_title']))
+
+
+    def test_post_is_assigned_a_link_name(self):
+        self.post_object.save()        
+
+        post = Post.objects.all()[0]
+        self.assertEqual(post.link, 'a-new-post-title')
+
+    def test_post_url_resolves_to_post_view(self):
+        self.post_object.save()
+
+        found = resolve('/blog/%s/' % self.post_object.link)
+
+        self.assertEqual(found.func, view_post)
+
+    def test_blog_url_returns_correct_html(self):
+        post = {'title': 'Some link!', 'content': 'Some content.','link':
+                title_to_link('Some link!')}
+        Post.objects.create(**post)
+
+        request = HttpRequest() 
+        response = view_post(request,title_to_link('Some link!')) 
+
+        expected_html = render_to_string('blog/view-post.html', {'post':post})
+        self.assertEqual(response.content.decode(), expected_html)
+
+    def test_post_view_inherits_view_template(self):
+        self.post_object.save()
+
+        response = self.client.get('/blog/a-new-post-title/')
+        self.assertTemplateUsed(response, 'blog/main.html')
+
+    def test_post_has_an_individual_link(self):
+        self.post_object.save()
+
+        response = self.client.get('/blog/a-new-post-title/')
+        self.assertIn('A new post title!!', response.content.decode())

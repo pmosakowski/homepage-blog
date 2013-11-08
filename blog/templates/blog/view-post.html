@@ -1,0 +1,14 @@
+{% extends 'blog/main.html' %}
+
+{% block title %}
+    <Title>Blog</title>
+{% endblock %}
+
+{% block menu %}
+    <a href="/blog/new-post">New post</a>
+{% endblock %}
+
+{% block content %}
+    <h1>  {{ post.title }} </h1>
+    <div> {{ post.content }} </div>
+{% endblock %}
