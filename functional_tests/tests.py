@@ -1,6 +1,7 @@
 #! /home/mosaq/python-env/python3-django/bin/python
 
 from django.test import LiveServerTestCase
+from django.utils.unittest import skip
 from selenium import webdriver
 
 class VisitorTest(LiveServerTestCase):
@@ -58,8 +59,26 @@ class VisitorTest(LiveServerTestCase):
         self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
-    def test_user_display_full_post_view(self):
+    def test_user_navigates_to_full_post_view(self):
+        self.browser.get(self.live_server_url + '/blog/new-post')
+
+        # we add new post
+        post_form = self.browser.find_element_by_id('id_new_post')
+
+        title_input = post_form.find_element_by_id('id_post_title')
+        title_input.send_keys('This is an example post!')
+        content_input = post_form.find_element_by_id('id_post_content')
+        content_input.send_keys('Lorem ipsum woodchuck chuck out of luck.')
+
+        post_form.find_element_by_id('submit').click()
+       
+        self.assertEqual(self.browser.current_url, 
+                         self.live_server_url + '/blog')
+
+        view_post_link = self.browser.find_element_by_link_text('This is an example post!')
+        view_post_link.click()
+
+        self.assertEqual(self.browser.current_url, 
+                         self.live_server_url + '/blog/this-is-an-example-post')
         # user clicks on a post title or slug and displays full post contents
         self.fail('Finish the test!')
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')
