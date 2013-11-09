@@ -42,3 +42,8 @@ class PostModelTest(TestCase):
 
     def test_can_transform_title_into_link(self):
         self.assertEqual("some-link", title_to_link("Some link!"))
+        self.assertEqual("other-link", title_to_link("-other Link!-"))
+        self.assertEqual("some-link", title_to_link("Some--link!&"))
+        self.assertEqual("link-number-four", title_to_link("Link-number Four."))
+        self.assertEqual("fifth-link", title_to_link("fifth link!--"))
+        self.assertEqual("first-second-thing-link", title_to_link("First & second thing link!"))
