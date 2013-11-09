@@ -9,10 +9,16 @@ class Post(models.Model):
 def title_to_link(title):
     #to lowercase
     title = title.lower()
+    # strip quotes
+    title = re.sub(r"['\"]+","",title)
+    # convert all characters except aplhanum to dashes
+    title = re.sub(r"[^a-z0-9]+","-",title)
+    # remove dashes at beginning and end
+    title = re.sub(r"^-+|-+$","",title)
+    # remove double dashes
+    title = re.sub(r"--+","-",title)
     # continuous whitespace to dash
     title = re.sub(r"\s+","-",title)
-    # strip all characters except aplhanum & dashes
-    title = re.sub(r"[^a-z-]+","",title)
     return title
 
 # model tests go here
@@ -44,6 +50,16 @@ class PostModelTest(TestCase):
         self.assertEqual("some-link", title_to_link("Some link!"))
         self.assertEqual("other-link", title_to_link("-other Link!-"))
         self.assertEqual("some-link", title_to_link("Some--link!&"))
-        self.assertEqual("link-number-four", title_to_link("Link-number Four."))
+        self.assertEqual("link-number-four", 
+                title_to_link("Link-number Four."))
         self.assertEqual("fifth-link", title_to_link("fifth link!--"))
-        self.assertEqual("first-second-thing-link", title_to_link("First & second thing link!"))
+        self.assertEqual("first-second-thing-link", 
+                title_to_link("First & second thing link!"))
+        self.assertEqual("this-is-the-6th-link-on-our-page", 
+                title_to_link("This is the 6th link on our page."))
+        self.assertEqual("link-to-our-womens-mens-football-circles", 
+                title_to_link("Link to our Women's & Men's football circles?"))
+        self.assertEqual("these-toys-arent-boys", 
+                title_to_link("These toys aren't boys'."))
+        self.assertEqual("we-will-never-forget-says-pm",
+                title_to_link("'We will never forget' - says PM."))
