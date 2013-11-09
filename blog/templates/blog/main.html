@@ -10,7 +10,7 @@
 
 {% block content %}
     {% for post in posts %}
-        <h1>  {{ post.title }} </h1>
-        <div> {{ post.content }} </div>
+        <a href="/blog/{{ post.link }}/"><h1>{{ post.title }}</h1></a>
+        <div>{{ post.content }}</div>
     {% endfor %}
 {% endblock %}
