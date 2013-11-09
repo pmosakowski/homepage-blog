@@ -54,6 +54,14 @@ class BlogTest(TestCase):
         self.assertContains(response,'A new post title.')
         self.assertContains(response,'Some post content here.')
 
+    def test_blog_view_displays_links_to_posts(self):
+        Post.objects.create(title='A new post title.',
+                            content='Some post content here.')
+
+        response = blog_main(HttpRequest())
+
+        self.assertContains(response,
+                "<a href=\"\\blog\\a-new-post-title\\\"><h1>A new post title.</h1></a>")
 
 class NewPostTest(TestCase):
     def setUp(self):
