@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from mainpage.forms import LoginForm
 
 def main_page(request):
@@ -8,6 +8,11 @@ def about_page(request):
     return render(request,'mainpage/about.html')
 
 def login_page(request):
-    login_form = LoginForm()
-
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+        return redirect('/blog')
+    else:
+    
+        login_form = LoginForm()
+    
     return render(request,'mainpage/login.html',{'form': login_form})

@@ -48,7 +48,10 @@ class HomePageTest(TestCase):
 
 class LoginPageTest(TestCase):
     def setUp(self):
-        pass
+        self.login_data = { 
+                'username': 'juan@mexicocity.mx', 
+                'password': 'tequila'
+        }
 
     def test_login_url_resolves_to_login_page_view(self):
         found = resolve('/login')
@@ -80,3 +83,8 @@ class LoginPageTest(TestCase):
         self.assertContains(response, '<input id="id_username" name="username" type="text"/>', html=True)
         self.assertContains(response, '<input id="id_password" name="password" type="password"/>', html=True)
         self.assertContains(response, '<input id="submit" type="submit" value="Login"/>', html=True)
+
+    def test_login_page_redirects_on_success(self):
+        response = self.client.post('/login', self.login_data)
+
+        self.assertRedirects(response,'/blog', status_code=302)
