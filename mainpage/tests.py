@@ -4,7 +4,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 
 from mainpage.views import main_page, about_page, login_page
-from mainpage.forms import login_form
+from mainpage.forms import LoginForm
 
 class HomePageTest(TestCase):
 
@@ -58,7 +58,8 @@ class LoginPageTest(TestCase):
         request = HttpRequest() 
         response = login_page(request) 
 
-        expected_html = render_to_string('mainpage/login.html')
+        expected_html = render_to_string('mainpage/login.html',
+                {'form':LoginForm()})
         self.assertEqual(response.content.decode(), expected_html)
 
     def test_login_page_view_inherits_base_template(self):
@@ -69,5 +70,13 @@ class LoginPageTest(TestCase):
 
     def test_login_page_view_displays_login_form(self):
         response = login_page(HttpRequest())
+        login_form = LoginForm()
+        
+        self.assertContains(response, login_form.as_p())
 
-        self.assertContains(response, login_form.as_p(), html=true)
+    def test_login_page_has_required_elements(self):
+        response = login_page(HttpRequest())
+
+        self.assertContains(response, '<input id="id_username" name="username" type="text"/>', html=True)
+        self.assertContains(response, '<input id="id_password" name="password" type="password"/>', html=True)
+        self.assertContains(response, '<input id="submit" type="submit" value="Login"/>', html=True)

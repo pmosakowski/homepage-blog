@@ -5,4 +5,8 @@
 {% endblock %}
 
 {% block content %}
+    <form id="id_login" method="POST">
+{{ form.as_p }}
+        <input id="submit" type="submit" value="Login"/>
+    </form>
 {% endblock %}
