@@ -5,3 +5,6 @@ def main_page(request):
 
 def about_page(request):
     return render(request,'mainpage/about.html')
+
+def login_page(request):
+    return render(request,'mainpage/login.html')

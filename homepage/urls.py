@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'mainpage.views.main_page', name='home'),
     url(r'^about$', 'mainpage.views.about_page', name='about'),
+    url(r'^login$', 'mainpage.views.login_page', name='login'),
 
     url(r'^blog', include('blog.urls')),
     # url(r'^homepage/', include('homepage.foo.urls')),

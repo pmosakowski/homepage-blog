@@ -3,7 +3,7 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
-from mainpage.views import main_page, about_page
+from mainpage.views import main_page, about_page, login_page
 
 class HomePageTest(TestCase):
 
@@ -44,3 +44,24 @@ class HomePageTest(TestCase):
 
         expected_html = render_to_string('mainpage/about.html')
         self.assertEqual(response.content.decode(), expected_html)
+
+class LoginPageTest(TestCase):
+    def setUp(self):
+        pass
+
+    def test_login_url_resolves_to_login_page_view(self):
+        found = resolve('/login')
+        self.assertEqual(found.func, login_page)
+
+    def test_login_page_view_returns_correct_html(self):
+        request = HttpRequest() 
+        response = login_page(request) 
+
+        expected_html = render_to_string('mainpage/login.html')
+        self.assertEqual(response.content.decode(), expected_html)
+
+    def test_main_view_inherits_base_template(self):
+        response = self.client.get('/login')
+        
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response,'mainpage/base.html')
