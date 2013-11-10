@@ -60,7 +60,7 @@ class LoginPageTest(TestCase):
         expected_html = render_to_string('mainpage/login.html')
         self.assertEqual(response.content.decode(), expected_html)
 
-    def test_main_view_inherits_base_template(self):
+    def test_login_page_view_inherits_base_template(self):
         response = self.client.get('/login')
         
         self.assertEqual(response.status_code, 200)
