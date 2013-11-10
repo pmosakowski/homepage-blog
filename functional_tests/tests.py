@@ -107,9 +107,9 @@ class UserTest(LiveServerTestCase):
         self.browser.get(self.live_server_url + '/login')
 
         # submits his credentials
-        self.browser.find_element_by_id('username').send_keys('juan@mexicocity.mx')
-        self.browser.find_element_by_id('password').send_keys('tequila')
-        self.browser.find_element_by_id('login').click()
+        self.browser.find_element_by_id('id_username').send_keys('juan@mexicocity.mx')
+        self.browser.find_element_by_id('id_password').send_keys('tequila')
+        self.browser.find_element_by_id('id_login').click()
 
         # when he's logged in he can see his name on the page
         page_body = self.browser.find_element_by_tag_name('body')
