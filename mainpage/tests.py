@@ -4,6 +4,7 @@ from django.http import HttpRequest
 from django.template.loader import render_to_string
 
 from mainpage.views import main_page, about_page, login_page
+from mainpage.forms import login_form
 
 class HomePageTest(TestCase):
 
@@ -65,3 +66,8 @@ class LoginPageTest(TestCase):
         
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,'mainpage/base.html')
+
+    def test_login_page_view_displays_login_form(self):
+        response = login_page(HttpRequest())
+
+        self.assertContains(response, login_form.as_p(), html=true)
