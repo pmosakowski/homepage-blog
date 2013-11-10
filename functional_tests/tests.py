@@ -103,4 +103,34 @@ class UserTest(LiveServerTestCase):
     def test_user_logs_in_adds_a_post_and_logs_out(self):
         user = User.objects.create_user('Juan Ramirez', 'juan@mexicocity.mx','tequila')
 
+        # user navigates to the login page
+        self.browser.get(self.live_server_url + '/login')
+
+        # submits his credentials
+        self.browser.find_element_by_id('username').send_keys('juan@mexicocity.mx')
+        self.browser.find_element_by_id('password').send_keys('tequila')
+        self.browser.find_element_by_id('login').click()
+
+        # when he's logged in he can see his name on the page
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Juan Ramirez', page_body.text)
+        
+        # Juan navigates to submit new post
+        self.browser.get(self.live_server_url + '/blog/new-post')
+
+        # Juan fills out the form and adds new post
+        post_form = self.browser.find_element_by_id('id_new_post')
+
+        title_input = post_form.find_element_by_id('id_post_title')
+        title_input.send_keys('Juan\'s first post!')
+        content_input = post_form.find_element_by_id('id_post_content')
+        content_input.send_keys('Juan has a few words to say.')
+        
+        # Juan goes to check main page for his post
+        self.browser.get(self.live_server_url + '/blog')
+
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertIn('Juan\'s first post!', page_body.text)
+
         self.fail('Finish the test!')
+
