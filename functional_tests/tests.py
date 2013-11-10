@@ -131,6 +131,3 @@ class UserTest(LiveServerTestCase):
 
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Juan\'s first post!', page_body.text)
-
-        self.fail('Finish the test!')
-
