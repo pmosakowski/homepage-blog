@@ -3,6 +3,10 @@ from django.test import TestCase
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
+# for auth tests
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+
 from mainpage.views import main_page, about_page, login_page
 from mainpage.forms import LoginForm
 
@@ -48,8 +52,9 @@ class HomePageTest(TestCase):
 
 class LoginPageTest(TestCase):
     def setUp(self):
+        User.objects.create_user('Juan Ramirez','juan@mexicocity.mx','tequila')
         self.login_data = { 
-                'username': 'juan@mexicocity.mx', 
+                'username': 'Juan Ramirez', 
                 'password': 'tequila'
         }
 
@@ -82,9 +87,15 @@ class LoginPageTest(TestCase):
 
         self.assertContains(response, '<input id="id_username" name="username" type="text"/>', html=True)
         self.assertContains(response, '<input id="id_password" name="password" type="password"/>', html=True)
-        self.assertContains(response, '<input id="submit" type="submit" value="Login"/>', html=True)
+        self.assertContains(response, '<input id="id_submit" type="submit" value="Login"/>', html=True)
 
-    def test_login_page_redirects_on_success(self):
+    def test_login_page_redirects(self):
         response = self.client.post('/login', self.login_data)
 
         self.assertRedirects(response,'/blog', status_code=302)
+
+    def test_login_view_can_authenticate(self):
+        user = authenticate(**self.login_data)
+
+        self.assertNotEqual(None,user)
+

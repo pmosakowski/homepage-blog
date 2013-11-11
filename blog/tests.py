@@ -7,6 +7,11 @@ from django.core.context_processors import csrf
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 
+# session support is necessary for logging in
+from django.contrib.sessions.backends.db import SessionStore
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
 from blog.views import blog_main, new_post, view_post
 from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
@@ -65,8 +70,23 @@ class BlogTest(TestCase):
                 "<a href=\"/blog/a-new-post-title/\"><h1>A new post title.</h1></a>",
                 html=True)
 
+
+class NewPostAuthenticationTest(TestCase):
+    def test_cannot_post_without_logging_in(self):
+        response = self.client.get('/blog/new-post')
+
+        self.assertRedirects(response,'/login?next=/blog/new-post',status_code=302)
+        
+        # we are not logged in and should get redirected
 class NewPostTest(TestCase):
     def setUp(self):
+        self.request = HttpRequest()
+        # create user and log in
+        User.objects.create_user('John Silver','j.silver@gmail.com','grog')
+        self.user_credentials = {'username':'John Silver','password': 'grog'}
+        self.user = authenticate(**self.user_credentials)
+        self.request.user = self.user
+        # post data for submission
         self.post_data = {
             'post_title': 'A new post title!!',
             'post_content': 'Some post content here.'
@@ -78,6 +98,7 @@ class NewPostTest(TestCase):
         self.assertEqual(found.func, new_post)
 
     def test_new_post_view_returns_correct_html(self):
+        self.client.login(**self.user_credentials)
         response = self.client.get('/blog/new-post')
 
         # use same context as previous request
@@ -86,6 +107,7 @@ class NewPostTest(TestCase):
         self.assertEqual(response.content.decode(), expected_html)
 
     def test_new_post_view_inherits_from_blog_template(self):
+        self.client.login(**self.user_credentials)
         response = self.client.get('/blog/new-post')
         
         self.assertTemplateUsed(response, 'blog/main.html')
@@ -115,7 +137,7 @@ class NewPostTest(TestCase):
         self.assertIn(self.post_data['post_content'], expected_html)
    
     def test_new_post_view_redirects_on_submission(self):
-        
+        self.client.login(**self.user_credentials)
         response = self.client.post('/blog/new-post', self.post_data)
         
         # do we redirect to /blog ?
@@ -124,22 +146,20 @@ class NewPostTest(TestCase):
                 r"^https?://[-\w]*/blog$")
 
     def test_new_post_view_saves_posts(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST.update(self.post_data)
+        self.request.method = 'POST'
+        self.request.POST.update(self.post_data)
         
         self.assertEqual(Post.objects.all().count(), 0)
-        new_post(request)
+        new_post(self.request)
         self.assertEqual(Post.objects.all().count(), 1)
 
     def test_new_post_view_doesnt_save_empty_posts(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['post_title'] = ''
-        request.POST['post_content'] = ''
+        self.request.method = 'POST'
+        self.request.POST['post_title'] = ''
+        self.request.POST['post_content'] = ''
 
         self.assertEqual(Post.objects.all().count(), 0)
-        new_post(request)
+        new_post(self.request)
         self.assertEqual(Post.objects.all().count(), 0)
 
 class PostViewTest(TestCase):

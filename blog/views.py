@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
@@ -9,6 +10,7 @@ def blog_main(request):
 
     return render(request, 'blog/main.html', {'posts': posts})
 
+@login_required
 def new_post(request):
     if request.method == 'POST': 
         form = AddNewPostForm(request.POST) # A form bound to the POST data
