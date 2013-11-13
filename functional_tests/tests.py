@@ -1,5 +1,3 @@
-#! /home/mosaq/python-env/python3-django/bin/python
-
 from time import sleep
 
 from django.test import LiveServerTestCase
