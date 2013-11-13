@@ -121,7 +121,8 @@ class UserTest(LiveServerTestCase):
         user = User.objects.create_user('Juan Ramirez', 'juan@mexicocity.mx','tequila')
 
         # user navigates to the login page
-        self.browser.get(self.live_server_url + '/login')
+        self.browser.get(self.live_server_url + '/')
+        self.browser.find_element_by_link_text('Log in').click()
 
         # submits his credentials
         self.browser.find_element_by_id('id_username').send_keys('Juan Ramirez')
@@ -150,3 +151,10 @@ class UserTest(LiveServerTestCase):
 
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('Juan\'s first post!', page_body.text)
+
+        # Juan logs out
+        self.browser.find_element_by_link_text('Log out').click()
+        self.browser.get(self.live_server_url + '/')
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertNotIn('Juan Ramirez',page_body.text)
+        self.assertIn('Log in',page_body.text)

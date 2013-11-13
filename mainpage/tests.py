@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 
-from mainpage.views import main_page, about_page, login_page
+from mainpage.views import main_page, about_page, login_page, logout_page
 from mainpage.forms import LoginForm
 
 class HomePageTest(TestCase):
@@ -39,7 +39,27 @@ class HomePageTest(TestCase):
         self.assertContains(response, '<div id="main-menu"><a href="about">About',
                 status_code=200, html=True)
 
-    def test_about_url_resolves_to_main_page_view(self):
+    def test_main_page_contains_login_link(self):
+        response = self.client.get('/')
+        self.assertContains(response, '<a href="/login">Log in',
+                status_code=200, html=True)
+
+    def test_main_page_contains_logout_link(self):
+        # set up and login
+        User.objects.create_user('John Rambo','rambo@firstblood.vt','rpg')
+        login_data = { 
+                'username': 'John Rambo', 
+                'password': 'rpg'
+        }
+        self.client.login(**login_data)
+
+        # proper test
+        response = self.client.get('/')
+        self.assertContains(response, '<a href="/logout">Log out',
+                status_code=200, html=True)
+
+class AboutPageTest(TestCase):
+    def test_about_url_resolves_to_about_page_view(self):
         found = resolve('/about')
         self.assertEqual(found.func, about_page)
 
@@ -53,9 +73,13 @@ class HomePageTest(TestCase):
 class LoginPageTest(TestCase):
     def setUp(self):
         User.objects.create_user('Juan Ramirez','juan@mexicocity.mx','tequila')
-        self.login_data = { 
+        self.correct_login_data = { 
                 'username': 'Juan Ramirez', 
                 'password': 'tequila'
+        }
+        self.incorrect_login_data = { 
+                'username': 'Juan Ramirez', 
+                'password': 'tequila2000'
         }
 
     def test_login_url_resolves_to_login_page_view(self):
@@ -63,8 +87,8 @@ class LoginPageTest(TestCase):
         self.assertEqual(found.func, login_page)
 
     def test_login_page_view_returns_correct_html(self):
-        request = HttpRequest() 
-        response = login_page(request) 
+        request = HttpRequest()
+        response = login_page(request)
 
         expected_html = render_to_string('mainpage/login.html',
                 {'form':LoginForm()})
@@ -89,13 +113,44 @@ class LoginPageTest(TestCase):
         self.assertContains(response, '<input id="id_password" name="password" type="password"/>', html=True)
         self.assertContains(response, '<input id="id_submit" type="submit" value="Login"/>', html=True)
 
-    def test_login_page_redirects(self):
-        response = self.client.post('/login', self.login_data)
+    def test_login_page_redirects_on_correct_login(self):
+        response = self.client.post('/login', self.correct_login_data)
 
         self.assertRedirects(response,'/blog', status_code=302)
 
-    def test_login_view_can_authenticate(self):
-        user = authenticate(**self.login_data)
+    def test_framework_can_authenticate(self):
+        user = authenticate(**self.correct_login_data)
 
         self.assertNotEqual(None,user)
 
+    def test_login_view_can_log_user_in(self):
+        response = self.client.post('/login', self.correct_login_data)
+        response = self.client.get('/')
+
+        self.assertContains(response, 'Juan Ramirez')
+
+    def test_login_view_displays_error_on_incorrect_login(self):
+        response = self.client.post('/login', self.incorrect_login_data)
+
+class LogoutViewTest(TestCase):
+    def setUp(self):
+        User.objects.create_user('Juan Ramirez','juan@mexicocity.mx','tequila')
+        self.correct_login_data = { 
+                'username': 'Juan Ramirez', 
+                'password': 'tequila'
+        }
+
+        self.client.login(**self.correct_login_data)
+
+    def test_about_url_resolves_to_main_page_view(self):
+        found = resolve('/logout')
+        self.assertEqual(found.func, logout_page)
+
+    def test_can_log_out(self):
+        response = self.client.get('/')
+        self.assertContains(response, 'Juan Ramirez')
+
+        self.client.get('/logout')
+        response = self.client.get('/')
+        self.assertNotContains(response, 'Juan Ramirez')
+        self.assertContains(response, 'Log in')

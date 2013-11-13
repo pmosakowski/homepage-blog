@@ -4,7 +4,12 @@
         {% endblock %}
     </head>
     <body>
-        {{ user.username }}
+        {% if user.is_authenticated %}
+            Hello, {{ user.username }}. <a href='/logout'>Log out</a>
+        {% else %}
+            Hello, visitor. <a href='/login'>Log in</a>
+        {% endif %}
+        
         {% include 'mainpage/mainmenu.html' %}
         {% block menu %}
         {% endblock %}
