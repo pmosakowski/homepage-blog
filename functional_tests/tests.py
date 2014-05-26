@@ -79,7 +79,7 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
-    # individual pst views and direct links
+    # individual post views and direct links
     def test_user_navigates_to_full_post_view(self):
         self.browser.get(self.live_server_url + '/blog/new-post')
 
@@ -108,6 +108,37 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
 
+    def test_user_adds_posts_and_examines_extended_attributes(self):
+        self.browser.get(self.live_server_url + '/blog/new-post')
+        # we add new post
+        post_form = self.browser.find_element_by_id('id_new_post')
+
+        title_input = post_form.find_element_by_id('id_post_title')
+        title_input.send_keys('I didn\'t ask for this!')
+        content_input = post_form.find_element_by_id('id_post_content')
+        content_input.send_keys('Adam Jensen didn\'t ask for this.')
+        # author should be set by the view
+        # submitted date should be set by the view
+        # set publish date
+        publish_date_input = post_form.find_element_by_id('id_post_publish_date')
+        publish_date_input.send_keys('13/11/2013 19:00:00')
+        # set category 
+        category_input = post_form.find_element_by_id('id_post_category')
+        category_input.send_keys('Life stories')
+        # add tags
+        tag_input = post_form.find_element_by_id('id_post_tags')
+        tag_input.send_keys('oopsies desuex yolo')
+        # submit
+        post_form.find_element_by_id('id_submit').click()
+
+        self.browser.get(self.live_server_url + '/blog/i-didnt-ask-for-this/')
+        page_body = self.browser.find_element_by_tag_name('body')
+
+        self.assertIn('I didn\'t ask for this!', page_body.text)
+        self.assertIn('published Today', page_body.text)
+        self.assertIn('by John Rambo', page_body.text)
+        self.assertIn('Category: Life stories', page_body.text)
+        self.assertIn('Tags: deusex oopsies yolt', page_body.text)
 class UserTest(LiveServerTestCase):
 
     def setUp(self):
