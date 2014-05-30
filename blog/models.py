@@ -12,11 +12,11 @@ class Post(models.Model):
     link = models.CharField(max_length=512)
 
     submission_date = models.DateTimeField(auto_now_add=True)
-    publication_date = models.DateTimeField()
+    publication_date = models.DateTimeField(null=True,blank=True)
     modification_date = models.DateTimeField(auto_now=True)
 
-    tags = models.CharField(max_length=512)
-    category = models.CharField(max_length=512)
+    tags = models.CharField(blank=True,max_length=512)
+    category = models.CharField(blank=True,max_length=512)
 
 def title_to_link(title):
     #to lowercase

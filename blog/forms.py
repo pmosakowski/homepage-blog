@@ -12,6 +12,6 @@ class TitleField(forms.CharField):
 class AddNewPostForm(forms.Form):
     post_title = TitleField(max_length=512)
     post_content = forms.CharField(widget=forms.Textarea())
-    post_publication_date = forms.DateTimeField()
-    post_tags = forms.CharField(max_length=256)
-    post_category = forms.CharField(max_length=256)
+    post_publication_date = forms.DateTimeField(required=False)
+    post_tags = forms.CharField(max_length=256,required=False)
+    post_category = forms.CharField(max_length=256,required=False)

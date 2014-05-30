@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
@@ -12,6 +14,10 @@ from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
 
 class BlogTest(TestCase):
+    def setUp(self):
+        self.author = User.objects.create_user('mrauthor',
+                'author@writers.com', 'pass')
+
     def test_blog_url_resolves_to_blog_view(self):
         found = resolve('/blog')
 
@@ -45,7 +51,8 @@ class BlogTest(TestCase):
         self.assertIn(post['content'], expected_html)
 
     def test_blog_view_can_display_saved_posts(self):
-        Post.objects.create(title='A new post title.',
+        Post.objects.create(author=self.author,
+                            title='A new post title.',
                             content='Some post content here.')
 
         response = blog_main(HttpRequest())
@@ -54,7 +61,8 @@ class BlogTest(TestCase):
         self.assertContains(response,'Some post content here.')
 
     def test_blog_view_displays_links_to_posts(self):
-        Post.objects.create(title='A new post title.',
+        Post.objects.create(author=self.author,
+                            title='A new post title.',
                             content='Some post content here.',
                             link=title_to_link('A new post title.'))
 
@@ -82,7 +90,7 @@ class NewPostTest(TestCase):
         self.post_data = {
             'post_title': 'A new post title!!',
             'post_content': 'Some post content here.',
-            'post_publication_date': '23-11-2013 17:00',
+            'post_publication_date': datetime(2012,6,15,17,0,0),
             'post_tags': 'programming web',
             'post_category': 'Tutorials'
         }
@@ -162,14 +170,12 @@ class NewPostTest(TestCase):
 
 class PostViewTest(TestCase):
     def setUp(self):
-        self.post_data = {
-            'post_title': 'A new post title!!',
-            'post_content': 'Some post content here.'
-        }
-
-        self.post_object = Post(title=self.post_data['post_title'],
-                content=self.post_data['post_content'],
-                link=title_to_link(self.post_data['post_title']))
+        self.author = User.objects.create_user('mrauthor',
+                    'author@writers.com', 'pass')
+        self.post_object = Post(title='A new post title!!',
+                author=self.author,
+                content='Some post content here.',
+                link=title_to_link('A new post title!!'))
 
     def test_post_is_assigned_a_link_name(self):
         self.post_object.save()
@@ -185,7 +191,7 @@ class PostViewTest(TestCase):
         self.assertEqual(found.func, view_post)
 
     def test_blog_url_returns_correct_html(self):
-        post = {'title': 'Some link!', 'content': 'Some content.','link':
+        post = {'author':self.author, 'title': 'Some link!', 'content': 'Some content.','link':
                 title_to_link('Some link!')}
         Post.objects.create(**post)
 
@@ -206,3 +212,20 @@ class PostViewTest(TestCase):
 
         response = self.client.get('/blog/a-new-post-title/')
         self.assertIn('A new post title!!', response.content.decode())
+
+class NewPostFormTest(TestCase):
+    def setUp(self):
+        self.post_data = {
+            'post_title': 'A new post title!!',
+            'post_content': 'Some post content here.',
+            'post_publication_date': datetime(2012,6,15,17,0,0),
+            'post_tags': 'programming web',
+            'post_category': 'Tutorials'
+        }
+
+    def test_validation(self):
+        form = AddNewPostForm(self.post_data)
+        #self.assertEqual(True,form.is_valid())
+        
+        form.is_valid()
+        self.assertEqual(True,{}==form.errors)

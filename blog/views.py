@@ -17,6 +17,7 @@ def new_post(request):
         
         if form.is_valid(): # All validation rules pass
             Post.objects.create(
+                    author=request.user,
                     title=form.cleaned_data['post_title'],
                     content=form.cleaned_data['post_content'],
                     link=title_to_link(form.cleaned_data['post_title']))

@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 class VisitorTest(LiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.profile = webdriver.FirefoxProfile()
+        self.browser = webdriver.Firefox(firefox_profile=self.profile)
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
@@ -36,7 +37,8 @@ class VisitorTest(LiveServerTestCase):
 
 class LoggedUserTest(LiveServerTestCase):
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.profile = webdriver.FirefoxProfile()
+        self.browser = webdriver.Firefox(firefox_profile=self.profile)
         self.browser.implicitly_wait(3)
         user = User.objects.create_user('Shiba Inu', 'doge@kennel.jp','kibbles')
 
@@ -66,11 +68,11 @@ class LoggedUserTest(LiveServerTestCase):
         # Fill out the form and submit it
         post_form = self.browser.find_element_by_id('id_new_post')
 
-        title_input = post_form.find_element_by_id('id_post_title')
-        title_input.send_keys('This is an example post!')
-        content_input = post_form.find_element_by_id('id_post_content')
-        content_input.send_keys('Lorem ipsum woodchuck chuck out of luck.')
-
+        post_form.find_element_by_id('id_post_title')\
+                .send_keys('This is an example post!')
+        post_form.find_element_by_id('id_post_content')\
+                .send_keys('Lorem ipsum woodchuck chuck out of luck.')
+        
         post_form.find_element_by_id('id_submit').click()
 
         # main page loads
@@ -86,10 +88,10 @@ class LoggedUserTest(LiveServerTestCase):
         # we add new post
         post_form = self.browser.find_element_by_id('id_new_post')
 
-        title_input = post_form.find_element_by_id('id_post_title')
-        title_input.send_keys('This is an example post!')
-        content_input = post_form.find_element_by_id('id_post_content')
-        content_input.send_keys('Lorem ipsum woodchuck chuck out of luck.')
+        post_form.find_element_by_id('id_post_title')\
+                .send_keys('This is an example post!')
+        post_form.find_element_by_id('id_post_content')\
+                .send_keys('Lorem ipsum woodchuck chuck out of luck.')
 
         post_form.find_element_by_id('id_submit').click()
        
@@ -120,7 +122,7 @@ class LoggedUserTest(LiveServerTestCase):
         # author should be set by the view
         # submitted date should be set by the view
         # set publish date
-        publish_date_input = post_form.find_element_by_id('id_post_publish_date')
+        publish_date_input = post_form.find_element_by_id('id_post_publication_date')
         publish_date_input.send_keys('13/11/2013 19:00:00')
         # set category 
         category_input = post_form.find_element_by_id('id_post_category')
@@ -142,7 +144,8 @@ class LoggedUserTest(LiveServerTestCase):
 class UserTest(LiveServerTestCase):
 
     def setUp(self):
-        self.browser = webdriver.Firefox()
+        self.profile = webdriver.FirefoxProfile()
+        self.browser = webdriver.Firefox(firefox_profile=self.profile)
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
