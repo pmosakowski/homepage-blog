@@ -10,7 +10,8 @@ class VisitorTest(LiveServerTestCase):
 
     def setUp(self):
         self.profile = webdriver.FirefoxProfile()
-        self.browser = webdriver.Firefox(firefox_profile=self.profile)
+        self.firefox_esr_binary = webdriver.firefox.firefox_binary.FirefoxBinary(firefox_path="/usr/bin/firefox-esr")
+        self.browser = webdriver.Firefox(firefox_profile=self.profile,firefox_binary=self.firefox_esr_binary)
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
@@ -38,7 +39,8 @@ class VisitorTest(LiveServerTestCase):
 class LoggedUserTest(LiveServerTestCase):
     def setUp(self):
         self.profile = webdriver.FirefoxProfile()
-        self.browser = webdriver.Firefox(firefox_profile=self.profile)
+        self.firefox_esr_binary = webdriver.firefox.firefox_binary.FirefoxBinary(firefox_path="/usr/bin/firefox-esr")
+        self.browser = webdriver.Firefox(firefox_profile=self.profile,firefox_binary=self.firefox_esr_binary)
         self.browser.implicitly_wait(3)
         user = User.objects.create_user('Shiba Inu', 'doge@kennel.jp','kibbles')
 
@@ -145,7 +147,8 @@ class UserTest(LiveServerTestCase):
 
     def setUp(self):
         self.profile = webdriver.FirefoxProfile()
-        self.browser = webdriver.Firefox(firefox_profile=self.profile)
+        self.firefox_esr_binary = webdriver.firefox.firefox_binary.FirefoxBinary(firefox_path="/usr/bin/firefox-esr")
+        self.browser = webdriver.Firefox(firefox_profile=self.profile,firefox_binary=self.firefox_esr_binary)
         self.browser.implicitly_wait(3)
 
     def tearDown(self):
