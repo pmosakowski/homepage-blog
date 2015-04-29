@@ -2,6 +2,8 @@
     <head>
         {% block title %}
         {% endblock %}
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static "mainpage/css/main.css" %}"/>
     </head>
     <body>
         {% if user.is_authenticated %}
