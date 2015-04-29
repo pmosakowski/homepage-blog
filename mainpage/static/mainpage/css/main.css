@@ -1,6 +1,55 @@
+html {
+    min-height: 100%;
+    background-color: #222222;
+}
+
 
 body {
-    background-color: #b0c4de;
+    background-color: #dddddd;
     font-size: 12pt;
     font-family: sans-serif;
+    width: 800px;
+    height:100%;
+    padding: 10px 50px;
+    margin: 0 auto;
+    border-style: none solid;
+    border-width: 0 2px;
+    border-color: #666666;
+}
+
+h1.header {
+    font-size: 400%;
+    margin-bottom: 10px;
+    color: #000033;
+}
+
+h2.subheader {
+    font-size: 120%;
+    font-weight: bold;
+    font-style: italic;
+    color: #000033;
+}
+
+p#login {
+    font-size: 70%;
+    font-weight: bold;
+}
+
+a:link,a:visited {
+    color: #bb0000;
+    text-decoration: none;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+
+div.menu {
+    margin: 10px;
+    font-weight: bold;
 }

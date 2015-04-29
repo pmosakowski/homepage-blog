@@ -6,16 +6,32 @@
         <link rel="stylesheet" type="text/css" href="{% static "mainpage/css/main.css" %}"/>
     </head>
     <body>
-        {% if user.is_authenticated %}
-            Hello, {{ user.username }}. <a href='/logout'>Log out</a>
-        {% else %}
-            Hello, visitor. <a href='/login'>Log in</a>
-        {% endif %}
-        
-        {% include 'mainpage/mainmenu.html' %}
-        {% block menu %}
-        {% endblock %}
-        {% block content %}
-        {% endblock %}
+        {# header #}
+        <div class="header">
+            <h1 class="header">WENHAUS</h1>
+            <h2 class="subheader">Some stuff for web hosting and whatever.</h2>
+            <p id="login">
+            {% if user.is_authenticated %}
+                Hello, {{ user.username }}. <a href='/logout'>Log out</a>
+            {% else %}
+                Hello, visitor. <a href='/login'>Log in</a>
+            {% endif %}
+            </p>
+        </div>
+
+        {# menus #}
+        <div class="menu">
+            {# main menu #}
+            {% include 'mainpage/mainmenu.html' %}
+            {# per page menu #}
+            {% block menu %}
+            {% endblock %}
+        </div>
+
+        {# content #}
+        <div class="content">
+            {% block content %}
+            {% endblock %}
+        </div>
     </body>
 </html>
