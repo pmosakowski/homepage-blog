@@ -29,6 +29,12 @@ class HomePageTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response,'mainpage/base.html')
 
+    def test_main_view_links_to_css(self):
+        response = self.client.get('/')
+        
+        self.assertContains(response, 'mainpage/css/main.css',
+                status_code=200)
+
     def test_main_view_displays_main_menu_template(self):
         response = self.client.get('/')
         
