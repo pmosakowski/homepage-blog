@@ -13,6 +13,9 @@ from blog.views import blog_main, new_post, view_post
 from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
 
+from pytz import timezone
+london = timezone('Europe/London')
+
 class BlogTest(TestCase):
     def setUp(self):
         self.author = User.objects.create_user('mrauthor',
@@ -173,9 +176,13 @@ class PostViewTest(TestCase):
         self.author = User.objects.create_user('mrauthor',
                     'author@writers.com', 'pass')
         self.post_object = Post(title='A new post title!!',
-                author=self.author,
-                content='Some post content here.',
-                link=title_to_link('A new post title!!'))
+                author = self.author,
+                content = 'Some post content here.',
+                link = title_to_link('A new post title!!'),
+                publication_date = datetime(2012,6,15,17,0,0,tzinfo=london),
+                tags = 'programming web',
+                category = 'tutorials'
+        )
 
     def test_post_is_assigned_a_link_name(self):
         self.post_object.save()
@@ -191,14 +198,12 @@ class PostViewTest(TestCase):
         self.assertEqual(found.func, view_post)
 
     def test_blog_url_returns_correct_html(self):
-        post = {'author':self.author, 'title': 'Some link!', 'content': 'Some content.','link':
-                title_to_link('Some link!')}
-        Post.objects.create(**post)
+        self.post_object.save()
 
         request = HttpRequest()
-        response = view_post(request, title_to_link('Some link!'))
+        response = view_post(request, self.post_object.link)
 
-        expected_html = render_to_string('blog/view-post.html', {'post': post})
+        expected_html = render_to_string('blog/view-post.html', {'post': self.post_object})
         self.assertEqual(response.content.decode(), expected_html)
 
     def test_post_view_inherits_view_template(self):
@@ -212,6 +217,12 @@ class PostViewTest(TestCase):
 
         response = self.client.get('/blog/a-new-post-title/')
         self.assertIn('A new post title!!', response.content.decode())
+
+    def test_post_displays_publication_date(self):
+        self.post_object.save()
+
+        response = self.client.get('/blog/a-new-post-title/')
+        self.assertIn('2012', response.content.decode())
 
 class NewPostFormTest(TestCase):
     def setUp(self):
