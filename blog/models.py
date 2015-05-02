@@ -1,4 +1,4 @@
-from datetime import datetime, timezone, timedelta
+from django.utils import timezone
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -11,12 +11,21 @@ class Post(models.Model):
     content = models.TextField()
     link = models.CharField(max_length=512)
 
+    # these are stored as UTC
     submission_date = models.DateTimeField(auto_now_add=True)
     publication_date = models.DateTimeField(null=True,blank=True)
     modification_date = models.DateTimeField(auto_now=True)
 
     tags = models.CharField(blank=True,max_length=512)
     category = models.CharField(blank=True,max_length=512)
+
+    def save(self, *args, **kwargs):
+        self.__fill_pub_date()
+        super(Post, self).save(*args, **kwargs) # Call the "real" save() method.
+
+    def __fill_pub_date(self):
+        if self.publication_date is None:
+                self.publication_date = timezone.now()
 
 def title_to_link(title):
     #to lowercase
