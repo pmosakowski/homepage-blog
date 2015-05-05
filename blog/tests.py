@@ -1,9 +1,8 @@
-from datetime import datetime
-
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.utils.timezone import datetime
 
 # session support is necessary for logging in
 from django.contrib.auth.models import User
@@ -12,9 +11,6 @@ from django.contrib.auth import authenticate
 from blog.views import blog_main, new_post, view_post
 from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
-
-from pytz import timezone
-london = timezone('Europe/London')
 
 class BlogTest(TestCase):
     def setUp(self):
@@ -179,7 +175,7 @@ class PostViewTest(TestCase):
                 author = self.author,
                 content = 'Some post content here.',
                 link = title_to_link('A new post title!!'),
-                publication_date = datetime(2012,6,15,17,0,0,tzinfo=london),
+                publication_date = datetime(2012,6,15,17,0,0),
                 tags = 'programming web',
                 category = 'tutorials'
         )
