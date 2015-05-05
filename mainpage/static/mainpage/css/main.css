@@ -79,6 +79,27 @@ h4.subheader {
 /*    color: #000033;*/
 }
 
+/* menu styling */
+ul.menu {
+    list-style-type: none;
+}
+
+.menu li {
+    float: left;
+}
+
+.menu a {
+    display: block;
+    width: 60px;
+    padding: 5px;
+
+    background-color: #009900;
+
+    text-align: center;
+}
+
+
+
 a:link,a:visited {
 /*    color: #bb0000;*/
     text-decoration: none;
