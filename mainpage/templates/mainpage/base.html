@@ -6,32 +6,40 @@
         <link rel="stylesheet" type="text/css" href="{% static "mainpage/css/main.css" %}"/> 
     </head>
     <body>
-        {# header #}
-        <div class="header">
-            <h1 class="header">WENHAUS</h1>
-            <h2 class="subheader">Some stuff for web hosting and whatever.</h2>
-            <p id="login">
-            {% if user.is_authenticated %}
-                Hello, {{ user.username }}. <a href='/logout'>Log out</a>
-            {% else %}
-                Hello, visitor. <a href='/login'>Log in</a>
-            {% endif %}
-            </p>
-        </div>
+        <div id="page">
+            {# give us coloured box the width of a page #}
+            <div class="blue-wrapper">
+                {# header #}
+                <div id="header" class="centered">
+                    <h1 class="header">Pawel Mosakowski</h1>
+                    <h4 class="subheader">On subject of summoning computer softwares and applications thereof.</h4>
+                    <div id="login">
+                        {% if user.is_authenticated %}
+                            Hello, {{ user.username }}. <a href='/logout'>Log out</a>
+                        {% else %}
+                            Hello, visitor. <a href='/login'>Log in</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
 
-        {# menus #}
-        <div class="menu">
-            {# main menu #}
-            {% include 'mainpage/mainmenu.html' %}
-            {# per page menu #}
-            {% block menu %}
-            {% endblock %}
-        </div>
+            {# give us coloured box the width of a page #}
+            <div class="blue-wrapper">
+                {# menus #}
+                <div id="menu" class="centered">
+                    {# main menu #}
+                    {% include 'mainpage/mainmenu.html' %}
+                    {# per page menu #}
+                    {% block menu %}
+                    {% endblock %}
+                </div>
+            </div>
 
-        {# content #}
-        <div class="content">
-            {% block content %}
-            {% endblock %}
+            {# content #}
+            <div id="content" class="centered">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </body>
 </html>

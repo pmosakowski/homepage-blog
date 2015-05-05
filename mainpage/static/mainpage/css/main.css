@@ -1,51 +1,89 @@
-html {
-    min-height: 100%;
-    background-color: #222222;
+/*
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
+*/
 
-
-body {
-    background-color: #dddddd;
-    font-size: 12pt;
-    font-family: sans-serif;
-    width: 800px;
-    height:100%;
-    padding: 10px 50px;
-    margin: 0 auto;
-    border-style: none solid;
-    border-width: 0 2px;
+* {
+    margin: 0px;
+    padding: 0px;
+/*
+    border-style: solid;
+    border-width: 0px;
     border-color: #666666;
+*/
 }
 
-h1.header {
-    font-size: 400%;
-    margin-bottom: 10px;
-    color: #000033;
+div {
+    font-family:sans-serif;
+    overflow: auto; /* to stop margin collapsing*/
+    position: relative; /* to contain 'absolute' elements */
+    border: inherit;
 }
 
-h2.subheader {
-    font-size: 120%;
-    font-weight: bold;
-    font-style: italic;
-    color: #000033;
+#page{
+    width: 100%;
 }
 
-p#login {
+.centered {
+    width: 800px;
+    margin: 0px auto;
+}
+
+.blue-wrapper {
+    width: 100%;
+    background-color: #00aad4;
+}
+
+#header {
+    color: #ffffff;
+    background-color: #00aad4;
+
+    padding: 20px;
+}
+
+#login {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+
     font-size: 70%;
     font-weight: bold;
 }
 
+#menu {
+    font-weight: bold;
+}
+
+#content {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#content div {
+    margin: 20px 10px;;
+    padding: 5px;
+}
+
+h1.header {
+    margin-top: 20px;
+    margin-bottom: 10px;
+/*    color: #000033; */
+}
+
+h4.subheader {
+    font-weight: bold;
+    font-style: italic;
+/*    color: #000033;*/
+}
+
 a:link,a:visited {
-    color: #bb0000;
+/*    color: #bb0000;*/
     text-decoration: none;
 }
 
-
 a:hover,a:active {
     text-decoration: underline;
-}
-
-div.menu {
-    margin: 10px;
-    font-weight: bold;
 }
