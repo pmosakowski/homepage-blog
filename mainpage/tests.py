@@ -55,6 +55,11 @@ class HomePageTest(TestCase):
         self.assertContains(response, '<a href="/login">Log in',
                 status_code=200, html=True)
 
+    def test_main_page_contains_login_link(self):
+        response = self.client.get('/')
+        self.assertContains(response, '<a href="/">Home',
+                status_code=200, html=True)
+
     def test_main_page_contains_logout_link(self):
         # set up and login
         User.objects.create_user('John Rambo','rambo@firstblood.vt','rpg')
