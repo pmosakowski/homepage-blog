@@ -81,6 +81,12 @@ class AboutPageTest(TestCase):
         expected_html = render_to_string('mainpage/about.html')
         self.assertEqual(response.content.decode(), expected_html)
 
+    def test_about_page_inherits_base_template(self):
+        response = self.client.get('/about')
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'mainpage/base.html')
+
 class LoginPageTest(TestCase):
     def setUp(self):
         User.objects.create_user('Juan Ramirez','juan@mexicocity.mx','tequila')
