@@ -33,8 +33,8 @@ class VisitorTest(LiveServerTestCase):
 
         # new page loads
         # it displays placeholder page description
-        document_header = self.browser.find_element_by_tag_name('h1')
-        self.assertIn('About this page', document_header.text)
+        heading = self.browser.find_element_by_xpath("//div[@id='content']/h1")
+        self.assertIn('About this page', heading.text)
 
 class LoggedUserTest(LiveServerTestCase):
     def setUp(self):
