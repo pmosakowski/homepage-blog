@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from django.utils.timezone import datetime
+from django.utils.timezone import datetime, make_aware;
 
 # session support is necessary for logging in
 from django.contrib.auth.models import User
@@ -89,7 +89,7 @@ class NewPostTest(TestCase):
         self.post_data = {
             'post_title': 'A new post title!!',
             'post_content': 'Some post content here.',
-            'post_publication_date': datetime(2012,6,15,17,0,0),
+            'post_publication_date': datetime(2012,1,15,17,0,0),
             'post_tags': 'programming web',
             'post_category': 'Tutorials'
         }
@@ -175,7 +175,7 @@ class PostViewTest(TestCase):
                 author = self.author,
                 content = 'Some post content here.',
                 link = title_to_link('A new post title!!'),
-                publication_date = datetime(2012,6,15,17,0,0),
+                publication_date = make_aware(datetime(2012,2,15,17,0,0)),
                 tags = 'programming web',
                 category = 'tutorials'
         )
@@ -225,7 +225,7 @@ class NewPostFormTest(TestCase):
         self.post_data = {
             'post_title': 'A new post title!!',
             'post_content': 'Some post content here.',
-            'post_publication_date': datetime(2012,6,15,17,0,0),
+            'post_publication_date': datetime(2012,3,15,17,0,0),
             'post_tags': 'programming web',
             'post_category': 'Tutorials'
         }

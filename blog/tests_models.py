@@ -1,5 +1,4 @@
-from datetime import datetime, timezone, timedelta
-
+import django.utils.timezone as dtz;
 from django.test import TestCase
 from django.contrib.auth.models import User
 
@@ -14,7 +13,7 @@ class PostModelTest(TestCase):
         self.post1.title = "A post title"
         self.post1.content = "Some content"
         self.post1.link = "a-post-title"
-        self.post1.publication_date = datetime.now(timezone(timedelta()))
+        self.post1.publication_date = dtz.now()
 
         self.post1.tags = "programming linux"
         self.post1.category = "Tutorial"

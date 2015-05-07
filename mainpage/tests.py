@@ -42,12 +42,12 @@ class HomePageTest(TestCase):
     
     def test_main_menu_contains_about_link(self):
         response = self.client.get('/')
-        self.assertContains(response, '<a href="about">About',
+        self.assertContains(response, '<a href="/about">About',
                 status_code=200, html=True)
 
     def test_main_menu_contains_blog_link(self):
         response = self.client.get('/')
-        self.assertContains(response, '<a href="blog">Blog',
+        self.assertContains(response, '<a href="/blog">Blog',
                 status_code=200, html=True)
 
     def test_main_page_contains_login_link(self):

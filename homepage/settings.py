@@ -1,5 +1,11 @@
 import os.path
 
+# turn naive datetime warnings into exceptions
+import warnings
+warnings.filterwarnings(
+        'error', r"DateTimeField .* received a naive datetime",
+        RuntimeWarning, r'django\.db\.models\.fields')
+
 #Get the absolute path of the settings.py file's directory
 CONFIG_DIR = os.path.dirname(os.path.realpath(__file__ )) 
 PWD = os.path.dirname(CONFIG_DIR)
