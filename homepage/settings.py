@@ -141,6 +141,7 @@ INSTALLED_APPS = (
     'mainpage',
     'blog',
     'functional_tests',
+    'mytags',
 )
 
 # A sample logging configuration. The only tangible logging
