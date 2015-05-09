@@ -146,7 +146,7 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('published Today', page_body.text)
         self.assertIn('by Shiba Inu', page_body.text)
         self.assertIn('in Life stories', page_body.text)
-        self.assertIn('Tags: deusex oopsies yolt', page_body.text)
+        self.assertIn('Tags: oopsies desuex yolo', page_body.text)
 class UserTest(LiveServerTestCase):
 
     def setUp(self):

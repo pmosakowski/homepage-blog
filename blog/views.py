@@ -21,7 +21,10 @@ def new_post(request):
                     title=form.cleaned_data['post_title'],
                     content=form.cleaned_data['post_content'],
                     link=title_to_link(form.cleaned_data['post_title']),
-                    publication_date=form.cleaned_data['post_publication_date'])
+                    publication_date=form.cleaned_data['post_publication_date'],
+                    category=form.cleaned_data['post_category'],
+                    tags=form.cleaned_data['post_tags'],
+            )
             return HttpResponseRedirect('/blog') # Redirect after POST
     else:
         form = AddNewPostForm() # An unbound form
