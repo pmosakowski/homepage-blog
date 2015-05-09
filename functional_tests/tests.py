@@ -45,7 +45,7 @@ class LoggedUserTest(LiveServerTestCase):
         self.firefox_esr_binary = webdriver.firefox.firefox_binary.FirefoxBinary(firefox_path="/usr/bin/firefox-esr")
         self.browser = webdriver.Firefox(firefox_profile=self.profile,firefox_binary=self.firefox_esr_binary)
         self.browser.implicitly_wait(3)
-        user = User.objects.create_user('Shiba Inu', 'doge@kennel.jp','kibbles')
+        user = User.objects.create_user('Shiba Inu', 'doge@kennel.jp','kibbles', first_name='Shiba', last_name='Inu')
 
         # user navigates to the login page
         self.browser.get(self.live_server_url + '/login')

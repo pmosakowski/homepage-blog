@@ -170,7 +170,7 @@ class NewPostTest(TestCase):
 class PostViewTest(TestCase):
     def setUp(self):
         self.author = User.objects.create_user('mrauthor',
-                    'author@writers.com', 'pass')
+                    'author@writers.com', 'pass', first_name='Mr', last_name='Author')
         self.post_object = Post(title='A new post title!!',
                 author = self.author,
                 content = 'Some post content here.',
@@ -219,6 +219,12 @@ class PostViewTest(TestCase):
 
         response = self.client.get('/blog/a-new-post-title/')
         self.assertIn('2012', response.content.decode())
+
+    def test_post_displays_author(self):
+        self.post_object.save()
+
+        response = self.client.get('/blog/a-new-post-title/')
+        self.assertIn('by Mr Author', response.content.decode())
 
 class NewPostFormTest(TestCase):
     def setUp(self):
