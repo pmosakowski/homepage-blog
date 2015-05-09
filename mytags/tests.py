@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 import django.utils.timezone as tz
-import .templatetags.mytags as mt
+from .templatetags import mytags as mt
 
 class MyTagTest(TestCase):
     def setUp(self):

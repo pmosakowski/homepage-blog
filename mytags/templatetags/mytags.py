@@ -3,6 +3,7 @@ import django.utils.timezone as tz
 
 register = template.Library()
 
+@register.filter
 def humandate(value):
     date = value.date()
     today = tz.now().date()

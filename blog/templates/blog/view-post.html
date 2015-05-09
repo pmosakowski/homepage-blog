@@ -1,5 +1,7 @@
 {% extends 'blog/main.html' %}
 
+{% load mytags %}
+
 {% block title %}
     <Title>Blog</title>
 {% endblock %}
@@ -10,6 +12,6 @@
 
 {% block content %}
     <h1>  {{ post.title }} </h1>
-    <h6> Published on {{ post.publication_date }} </h6>
+    <h6> published {{ post.publication_date | humandate }} </h6>
     <div> {{ post.content }} </div>
 {% endblock %}

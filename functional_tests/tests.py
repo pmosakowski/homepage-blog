@@ -4,6 +4,9 @@ from django.test import LiveServerTestCase
 from django.utils.unittest import skip
 from selenium import webdriver
 
+import django.utils.timezone as tz
+
+
 from django.contrib.auth.models import User
 
 class VisitorTest(LiveServerTestCase):
@@ -125,7 +128,8 @@ class LoggedUserTest(LiveServerTestCase):
         # submitted date should be set by the view
         # set publish date
         publish_date_input = post_form.find_element_by_id('id_post_publication_date')
-        publish_date_input.send_keys('13/11/2013 19:00:00')
+        now = tz.now().strftime('%Y-%m-%d %H:%M:%S')
+        publish_date_input.send_keys(now)
         # set category 
         category_input = post_form.find_element_by_id('id_post_category')
         category_input.send_keys('Life stories')
@@ -140,7 +144,7 @@ class LoggedUserTest(LiveServerTestCase):
 
         self.assertIn('I didn\'t ask for this!', page_body.text)
         self.assertIn('published Today', page_body.text)
-        self.assertIn('by John Rambo', page_body.text)
+        self.assertIn('by Shiba Inu', page_body.text)
         self.assertIn('Category: Life stories', page_body.text)
         self.assertIn('Tags: deusex oopsies yolt', page_body.text)
 class UserTest(LiveServerTestCase):
