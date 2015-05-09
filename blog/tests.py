@@ -34,6 +34,11 @@ class BlogTest(TestCase):
 
         self.assertTemplateUsed(response, 'mainpage/base.html')
 
+    def test_blog_view_uses_post_template(self):
+        response = self.client.get('/blog')
+
+        self.assertTemplateUsed(response, 'blog/post.html')
+
     def test_blog_view_has_new_post_link(self):
         response = self.client.get('/blog')
 
@@ -41,13 +46,21 @@ class BlogTest(TestCase):
                 status_code=200, html=True)
 
     def test_blog_view_can_display_posts(self):
-        post = {'title': "A title", 'content': "Some content"}
+        post = {
+                'title': "A title", 
+                'content': "Some content",
+                'published_date': datetime(2015,3,15,15,20,0),
+                'author': {'first_name':'James','last_name':'Brown'},
+        }
         posts = [post]
 
         expected_html = render_to_string('blog/main.html', {'posts' : posts})
 
         self.assertIn(post['title'], expected_html)
         self.assertIn(post['content'], expected_html)
+        self.assertIn(post['published_date'].strftime('%Y-%m-%d'), expected_html)
+        self.assertIn(post['author']['first_name'], expected_html)
+        self.assertIn(post['author']['last_name'], expected_html)
 
     def test_blog_view_can_display_saved_posts(self):
         Post.objects.create(author=self.author,
@@ -202,11 +215,13 @@ class PostViewTest(TestCase):
         expected_html = render_to_string('blog/view-post.html', {'post': self.post_object})
         self.assertEqual(response.content.decode(), expected_html)
 
-    def test_post_view_inherits_view_template(self):
+    def test_post_view_uses_correct_templates(self):
         self.post_object.save()
 
         response = self.client.get('/blog/a-new-post-title/')
         self.assertTemplateUsed(response, 'blog/main.html')
+        self.assertTemplateUsed(response, 'blog/view-post.html')
+        self.assertTemplateUsed(response, 'blog/post.html')
 
     def test_post_has_an_individual_link(self):
         self.post_object.save()
@@ -218,7 +233,7 @@ class PostViewTest(TestCase):
         self.post_object.save()
 
         response = self.client.get('/blog/a-new-post-title/')
-        self.assertIn('2012', response.content.decode())
+        self.assertIn('2012-02-15', response.content.decode())
 
     def test_post_displays_author(self):
         self.post_object.save()
