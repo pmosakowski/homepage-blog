@@ -49,7 +49,7 @@ class BlogTest(TestCase):
         post = {
                 'title': "A title", 
                 'content': "Some content",
-                'published_date': datetime(2015,3,15,15,20,0),
+                'publication_date': datetime(2015,3,15,15,20,0),
                 'author': {'first_name':'James','last_name':'Brown'},
         }
         posts = [post]
@@ -58,7 +58,7 @@ class BlogTest(TestCase):
 
         self.assertIn(post['title'], expected_html)
         self.assertIn(post['content'], expected_html)
-        self.assertIn(post['published_date'].strftime('%Y-%m-%d'), expected_html)
+        self.assertIn(post['publication_date'].strftime('%Y-%m-%d'), expected_html)
         self.assertIn(post['author']['first_name'], expected_html)
         self.assertIn(post['author']['last_name'], expected_html)
 

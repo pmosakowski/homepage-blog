@@ -12,7 +12,6 @@
 
 {% block content %}
     {% for post in posts %}
-        <a href="/blog/{{ post.link }}/"><h1>{{ post.title }}</h1></a>
-        <div>{{ post.content }}</div>
+        {% include 'blog/post.html' %}
     {% endfor %}
 {% endblock %}
