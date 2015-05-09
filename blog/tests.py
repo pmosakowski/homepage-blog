@@ -55,6 +55,7 @@ class BlogTest(TestCase):
                 'content': "Some content",
                 'publication_date': datetime(2015,3,15,15,20,0),
                 'author': {'first_name':'James','last_name':'Brown'},
+                'category': 'No pain, no gain',
         }
         posts = [post]
 
@@ -65,16 +66,20 @@ class BlogTest(TestCase):
         self.assertIn(post['publication_date'].strftime('%Y-%m-%d'), expected_html)
         self.assertIn(post['author']['first_name'], expected_html)
         self.assertIn(post['author']['last_name'], expected_html)
+        self.assertIn(post['category'], expected_html)
 
     def test_blog_view_can_display_saved_posts(self):
         Post.objects.create(author=self.author,
                             title='A new post title.',
-                            content='Some post content here.')
+                            content='Some post content here.',
+                            category='Some category',
+        )
 
         response = blog_main(HttpRequest())
 
         self.assertContains(response,'A new post title.')
         self.assertContains(response,'Some post content here.')
+        self.assertContains(response,'Some category')
 
     def test_blog_view_displays_links_to_posts(self):
         Post.objects.create(author=self.author,
@@ -244,6 +249,12 @@ class PostViewTest(TestCase):
 
         response = self.client.get('/blog/a-new-post-title/')
         self.assertIn('by Mr Author', response.content.decode())
+
+    def test_post_displays_category(self):
+        self.post_object.save()
+
+        response = self.client.get('/blog/%s/' % self.post_object.link)
+        self.assertContains(response, 'tutorials')
 
 class NewPostFormTest(TestCase):
     def setUp(self):

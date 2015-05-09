@@ -1,5 +1,5 @@
 {% load mytags %}
 
 <a href="/blog/{{ post.link }}/"><h1>{{ post.title }}</h1></a>
-<h6> published {{ post.publication_date | humandate }} by {{ post.author.first_name }} {{  post.author.last_name }} </h6>
+<h6>published {{ post.publication_date | humandate }} by {{ post.author.first_name }} {{  post.author.last_name }} in {{ post.category }}</h6>
 <div> {{ post.content }} </div>
