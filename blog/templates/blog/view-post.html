@@ -11,7 +11,5 @@
 {% endblock %}
 
 {% block content %}
-    <h1>  {{ post.title }} </h1>
-    <h6> published {{ post.publication_date | humandate }} by {{ post.author.first_name }} {{  post.author.last_name }} </h6>
-    <div> {{ post.content }} </div>
+    {% include 'blog/post.html' %}
 {% endblock %}
