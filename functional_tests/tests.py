@@ -145,7 +145,7 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('I didn\'t ask for this!', page_body.text)
         self.assertIn('published Today', page_body.text)
         self.assertIn('by Shiba Inu', page_body.text)
-        self.assertIn('Category: Life stories', page_body.text)
+        self.assertIn('in Life stories', page_body.text)
         self.assertIn('Tags: deusex oopsies yolt', page_body.text)
 class UserTest(LiveServerTestCase):
 

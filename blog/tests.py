@@ -268,7 +268,6 @@ class NewPostFormTest(TestCase):
 
     def test_validation(self):
         form = AddNewPostForm(self.post_data)
-        #self.assertEqual(True,form.is_valid())
         
-        form.is_valid()
+        self.assertTrue(form.is_valid())
         self.assertEqual(True,{}==form.errors)
