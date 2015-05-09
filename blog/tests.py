@@ -35,6 +35,10 @@ class BlogTest(TestCase):
         self.assertTemplateUsed(response, 'mainpage/base.html')
 
     def test_blog_view_uses_post_template(self):
+        # need to add a post otherwise the template won't be used
+        Post.objects.create(author=self.author,
+                            title='A new post title.',
+                            content='Some post content here.')
         response = self.client.get('/blog')
 
         self.assertTemplateUsed(response, 'blog/post.html')
