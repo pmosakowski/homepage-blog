@@ -80,6 +80,18 @@ class BlogTest(TestCase):
 
         self.assertNotContains(response, 'A new post title')
 
+    def test_blog_view_doesnt_display_future_published_posts(self):
+        Post.objects.create(author=self.author,
+                            title='A new post title.',
+                            content='Some post content here.',
+                            category='Some category',
+                            publication_date=(dtz.now() + dtz.timedelta(days=1)),
+                            publish=True,
+        )
+
+        response = blog_main(HttpRequest())
+
+        self.assertNotContains(response, 'A new post title')
 
     def test_blog_view_can_display_saved_posts(self):
         Post.objects.create(author=self.author,

@@ -1,12 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+import django.utils.timezone as dtz
+
 from django.contrib.auth.decorators import login_required
 
 from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
 
 def blog_main(request):
-    posts = Post.objects.filter(publish=True)
+    posts = Post.objects.filter(publish=True,publication_date__lt=dtz.now())
 
     return render(request, 'blog/main.html', {'posts': posts})
 

@@ -4,7 +4,7 @@ from django.test import LiveServerTestCase
 from django.utils.unittest import skip
 from selenium import webdriver
 
-import django.utils.timezone as tz
+import django.utils.timezone as dtz
 
 
 from django.contrib.auth.models import User
@@ -139,7 +139,7 @@ class LoggedUserTest(LiveServerTestCase):
         # submitted date should be set by the view
         # set publish date
         publish_date_input = post_form.find_element_by_id('id_post_publication_date')
-        now = tz.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = dtz.now().strftime('%Y-%m-%d %H:%M:%S')
         publish_date_input.send_keys(now)
         # set category 
         category_input = post_form.find_element_by_id('id_post_category')
@@ -173,12 +173,51 @@ class LoggedUserTest(LiveServerTestCase):
         # submitted date should be set by the view
         # set publish date
         publish_date_input = post_form.find_element_by_id('id_post_publication_date')
-        now = tz.now().strftime('%Y-%m-%d %H:%M:%S')
+        now = dtz.now().strftime('%Y-%m-%d %H:%M:%S')
         publish_date_input.send_keys(now)
 
         # deselect 'publish' checkbox if it's selected
         publish_checkbox = post_form.find_element_by_id('id_post_publish')
         if publish_checkbox.is_selected():
+            publish_checkbox.click()
+
+        # set category
+        category_input = post_form.find_element_by_id('id_post_category')
+        category_input.send_keys('Life stories')
+
+        # add tags
+        tag_input = post_form.find_element_by_id('id_post_tags')
+        tag_input.send_keys('oopsies desuex yolo')
+
+        # submit
+        post_form.find_element_by_id('id_submit').click()
+
+        self.browser.get(self.live_server_url + '/blog')
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertNotIn('I didn\'t ask for this!', page_body.text)
+
+    def test_user_adds_post_with_tomorrow_publication_date(self):
+        self.browser.get(self.live_server_url + '/blog/new-post')
+        # we add new post
+        post_form = self.browser.find_element_by_id('id_new_post')
+
+        title_input = post_form.find_element_by_id('id_post_title')
+        title_input.send_keys('I didn\'t ask for this!')
+        content_input = post_form.find_element_by_id('id_post_content')
+        content_input.send_keys('Adam Jensen didn\'t ask for this.')
+
+        # author should be set by the view
+        # submitted date should be set by the view
+        # set publish date
+        publish_date_input = post_form.find_element_by_id('id_post_publication_date')
+        now = dtz.now()
+        next_day = dtz.timedelta(days=1)
+        tomorrow = (now + next_day).strftime('%Y-%m-%d %H:%M:%S')
+        publish_date_input.send_keys(tomorrow)
+
+        # select 'publish' checkbox
+        publish_checkbox = post_form.find_element_by_id('id_post_publish')
+        if not publish_checkbox.is_selected():
             publish_checkbox.click()
 
         # set category
