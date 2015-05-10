@@ -29,3 +29,8 @@ class NewPostFormTest(TestCase):
         self.assertIn('id_post_publish' ,form)
         self.assertIn('id_post_tags', form)
         self.assertIn('id_post_category', form)
+
+    def test_form_publish_checkbox_can_be_set(self):
+        form = AddNewPostForm(self.post_data)
+        self.assertTrue(form.is_valid())
+        self.assertTrue(form.cleaned_data['post_publish'])

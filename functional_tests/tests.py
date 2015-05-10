@@ -40,6 +40,7 @@ class VisitorTest(LiveServerTestCase):
         self.assertIn('About this page', heading.text)
 
 class LoggedUserTest(LiveServerTestCase):
+
     def setUp(self):
         self.profile = webdriver.FirefoxProfile()
         self.firefox_esr_binary = webdriver.firefox.firefox_binary.FirefoxBinary(firefox_path="/usr/bin/firefox-esr")
@@ -78,6 +79,11 @@ class LoggedUserTest(LiveServerTestCase):
         post_form.find_element_by_id('id_post_content')\
                 .send_keys('Lorem ipsum woodchuck chuck out of luck.')
         
+        # select 'publish' checkbox if it's not selected
+        publish_checkbox = post_form.find_element_by_id('id_post_publish')
+        if not publish_checkbox.is_selected():
+            publish_checkbox.click()
+
         post_form.find_element_by_id('id_submit').click()
 
         # main page loads
@@ -97,6 +103,11 @@ class LoggedUserTest(LiveServerTestCase):
                 .send_keys('This is an example post!')
         post_form.find_element_by_id('id_post_content')\
                 .send_keys('Lorem ipsum woodchuck chuck out of luck.')
+
+        # select 'publish' checkbox if it's not selected
+        publish_checkbox = post_form.find_element_by_id('id_post_publish')
+        if not publish_checkbox.is_selected():
+            publish_checkbox.click()
 
         post_form.find_element_by_id('id_submit').click()
        
@@ -147,6 +158,44 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('by Shiba Inu', page_body.text)
         self.assertIn('in Life stories', page_body.text)
         self.assertIn('Tags: oopsies desuex yolo', page_body.text)
+
+    def test_user_adds_unpublished_post(self):
+        self.browser.get(self.live_server_url + '/blog/new-post')
+        # we add new post
+        post_form = self.browser.find_element_by_id('id_new_post')
+
+        title_input = post_form.find_element_by_id('id_post_title')
+        title_input.send_keys('I didn\'t ask for this!')
+        content_input = post_form.find_element_by_id('id_post_content')
+        content_input.send_keys('Adam Jensen didn\'t ask for this.')
+
+        # author should be set by the view
+        # submitted date should be set by the view
+        # set publish date
+        publish_date_input = post_form.find_element_by_id('id_post_publication_date')
+        now = tz.now().strftime('%Y-%m-%d %H:%M:%S')
+        publish_date_input.send_keys(now)
+
+        # deselect 'publish' checkbox if it's selected
+        publish_checkbox = post_form.find_element_by_id('id_post_publish')
+        if publish_checkbox.is_selected():
+            publish_checkbox.click()
+
+        # set category
+        category_input = post_form.find_element_by_id('id_post_category')
+        category_input.send_keys('Life stories')
+
+        # add tags
+        tag_input = post_form.find_element_by_id('id_post_tags')
+        tag_input.send_keys('oopsies desuex yolo')
+
+        # submit
+        post_form.find_element_by_id('id_submit').click()
+
+        self.browser.get(self.live_server_url + '/blog')
+        page_body = self.browser.find_element_by_tag_name('body')
+        self.assertNotIn('I didn\'t ask for this!', page_body.text)
+
 class UserTest(LiveServerTestCase):
 
     def setUp(self):
@@ -184,6 +233,11 @@ class UserTest(LiveServerTestCase):
         title_input.send_keys('Juan\'s first post!')
         content_input = post_form.find_element_by_id('id_post_content')
         content_input.send_keys('Juan has a few words to say.')
+
+        # select 'publish' checkbox if it's not selected
+        publish_checkbox = post_form.find_element_by_id('id_post_publish')
+        if not publish_checkbox.is_selected():
+            publish_checkbox.click()
 
         post_form.find_element_by_id('id_submit').click()
         

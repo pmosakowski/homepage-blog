@@ -6,7 +6,7 @@ from blog.forms import AddNewPostForm
 from blog.models import Post, title_to_link
 
 def blog_main(request):
-    posts = Post.objects.all()
+    posts = Post.objects.filter(publish=True)
 
     return render(request, 'blog/main.html', {'posts': posts})
 
@@ -22,6 +22,7 @@ def new_post(request):
                     content=form.cleaned_data['post_content'],
                     link=title_to_link(form.cleaned_data['post_title']),
                     publication_date=form.cleaned_data['post_publication_date'],
+                    publish=form.cleaned_data['post_publish'],
                     category=form.cleaned_data['post_category'],
                     tags=form.cleaned_data['post_tags'],
             )

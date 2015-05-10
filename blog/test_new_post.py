@@ -25,9 +25,10 @@ class NewPostTest(TestCase):
         self.post_data = {
             'post_title': 'A new post title!!',
             'post_content': 'Some post content here.',
-            'post_publication_date': tz.datetime(2012,1,15,17,0,0),
+            'post_publication_date': '2012-01-15 17:00:00',
+            'post_publish': 'True',
             'post_tags': 'programming web',
-            'post_category': 'Tutorials'
+            'post_category': 'Tutorials',
         }
 
     def test_cannot_post_without_logging_in(self):
@@ -90,6 +91,15 @@ class NewPostTest(TestCase):
         self.assertEqual(Post.objects.all().count(), 0)
         new_post(self.request)
         self.assertEqual(Post.objects.all().count(), 1)
+
+        post = Post.objects.all()[0]
+
+        self.assertEqual(self.post_data['post_title'], post.title)
+        self.assertEqual(self.post_data['post_content'], post.content)
+        self.assertEqual(self.post_data['post_publication_date'], post.publication_date.strftime('%Y-%m-%d %H:%M:%S'))
+        self.assertEqual(True, post.publish)
+        self.assertEqual(self.post_data['post_tags'], post.tags)
+        self.assertEqual(self.post_data['post_category'], post.category)
 
     def test_new_post_view_doesnt_save_empty_posts(self):
         self.request.method = 'POST'

@@ -13,5 +13,6 @@ class AddNewPostForm(forms.Form):
     post_title = TitleField(max_length=512)
     post_content = forms.CharField(widget=forms.Textarea())
     post_publication_date = forms.DateTimeField(required=False)
+    post_publish = forms.BooleanField(required=False)
     post_tags = forms.CharField(max_length=256,required=False)
     post_category = forms.CharField(max_length=256,required=False)

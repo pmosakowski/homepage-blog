@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
-from django.utils import timezone as tz
+from django.utils import timezone as dtz
 
 from django.contrib.auth.models import User
 
@@ -35,7 +35,9 @@ class BlogTest(TestCase):
         # need to add a post otherwise the template won't be used
         Post.objects.create(author=self.author,
                             title='A new post title.',
-                            content='Some post content here.')
+                            content='Some post content here.',
+                            publish=True,
+        )
         response = self.client.get('/blog')
 
         self.assertTemplateUsed(response, 'blog/post.html')
@@ -50,7 +52,7 @@ class BlogTest(TestCase):
         post = {
                 'title': "A title", 
                 'content': "Some content",
-                'publication_date': tz.datetime(2015,3,15,15,20,0),
+                'publication_date': dtz.datetime(2015,3,15,15,20,0),
                 'author': {'first_name':'James','last_name':'Brown'},
                 'category': 'No pain, no gain',
         }
@@ -65,11 +67,26 @@ class BlogTest(TestCase):
         self.assertIn(post['author']['last_name'], expected_html)
         self.assertIn(post['category'], expected_html)
 
+    def test_blog_view_doesnt_display_unpublished_posts(self):
+        Post.objects.create(author=self.author,
+                            title='A new post title.',
+                            content='Some post content here.',
+                            category='Some category',
+                            publication_date=dtz.now(),
+                            publish=False,
+        )
+
+        response = blog_main(HttpRequest())
+
+        self.assertNotContains(response, 'A new post title')
+
+
     def test_blog_view_can_display_saved_posts(self):
         Post.objects.create(author=self.author,
                             title='A new post title.',
                             content='Some post content here.',
                             category='Some category',
+                            publish=True,
         )
 
         response = blog_main(HttpRequest())
@@ -82,7 +99,9 @@ class BlogTest(TestCase):
         Post.objects.create(author=self.author,
                             title='A new post title.',
                             content='Some post content here.',
-                            link=title_to_link('A new post title.'))
+                            link=title_to_link('A new post title.'),
+                            publish=True,
+        )
 
         response = blog_main(HttpRequest())
 
