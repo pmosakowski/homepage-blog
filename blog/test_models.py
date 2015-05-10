@@ -52,7 +52,7 @@ class PostModelTest(TestCase):
         self.assertEqual("we-will-never-forget-says-pm",
                 title_to_link("'We will never forget' - says PM."))
 
-    # test if the publication date will get automatically filled in if it's empty
+    # if post is set to be published the publication date will get automatically filled in if it's empty
     def test_auto_publication_date(self):
         Post.objects.create(
             author = User.objects.create_user('tiago',
@@ -61,6 +61,7 @@ class PostModelTest(TestCase):
             content = "A verys short article",
             link = title_to_link("Some title, not important"),
             publication_date = None,
+            publish = True,
             tags = "test model django",
             category = "programming",
         )
@@ -68,3 +69,21 @@ class PostModelTest(TestCase):
         post = Post.objects.get(title='Some title, not important')
         self.assertIsNotNone(post)
         self.assertIsNotNone(post.publication_date)
+    
+    # if post isn't set to be published the publication date will remain empty
+    def test_no_auto_publication_date(self):
+        Post.objects.create(
+            author = User.objects.create_user('tiago',
+                'author@writers.com', 'pass'),
+            title = "Some title, not important",
+            content = "A verys short article",
+            link = title_to_link("Some title, not important"),
+            publication_date = None,
+            publish = False,
+            tags = "test model django",
+            category = "programming",
+        )
+
+        post = Post.objects.get(title='Some title, not important')
+        self.assertIsNotNone(post)
+        self.assertIsNone(post.publication_date)

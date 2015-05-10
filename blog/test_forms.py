@@ -9,6 +9,7 @@ class NewPostFormTest(TestCase):
             'post_title': 'A new post title!!',
             'post_content': 'Some post content here.',
             'post_publication_date': tz.datetime(2012,3,15,17,0,0),
+            'post_publish': True,
             'post_tags': 'programming web',
             'post_category': 'Tutorials'
         }
@@ -25,5 +26,6 @@ class NewPostFormTest(TestCase):
         self.assertIn('id_post_title', form)
         self.assertIn('id_post_content', form)
         self.assertIn('id_post_publication_date', form)
+        self.assertIn('id_post_publish' ,form)
         self.assertIn('id_post_tags', form)
         self.assertIn('id_post_category', form)
