@@ -26,7 +26,7 @@ class Post(models.Model):
         super(Post, self).save(*args, **kwargs) # Call the "real" save() method.
 
     def __fill_pub_date(self):
-        if self.publication_date is None:
+        if self.publication_date is None and self.publish is True:
                 self.publication_date = dtz.now()
 
 def title_to_link(title):
