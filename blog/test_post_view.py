@@ -60,7 +60,6 @@ class PostViewTest(TestCase):
         self.post_object.save()
 
         response = view_post(HttpRequest, self.post_object.link)
-        print(response.content.decode())
         self.assertContains(response, '<h2>Subheading</h2>', html=True)
 
     def test_post_view_uses_correct_templates(self):
