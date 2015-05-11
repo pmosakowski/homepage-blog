@@ -102,7 +102,7 @@ class LoggedUserTest(LiveServerTestCase):
         post_form.find_element_by_id('id_post_title')\
                 .send_keys('This is an example post!')
         post_form.find_element_by_id('id_post_content')\
-                .send_keys('Lorem ipsum woodchuck chuck out of luck. *boo!* __ah?__')
+                .send_keys('Lorem ipsum woodchuck chuck out of luck. *boo!* **ah?**')
 
         # select 'publish' checkbox if it's not selected
         publish_checkbox = post_form.find_element_by_id('id_post_publish')
@@ -125,8 +125,8 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
         # check if post content uses markdown
-        self.assertIn('<em>boo!</em>', page_body.text)
-        self.assertIn('<strong>ah?</strong>', page_body.text)
+        self.assertIn('<em>boo!</em>', self.browser.page_source)
+        self.assertIn('<strong>ah?</strong>', self.browser.page_source)
 
 
     def test_user_adds_posts_and_examines_extended_attributes(self):

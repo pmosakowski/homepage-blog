@@ -142,6 +142,8 @@ INSTALLED_APPS = (
     'blog',
     'functional_tests',
     'mytags',
+    # enable python-markdown2 integration
+    'markdown_deux',
 )
 
 # A sample logging configuration. The only tangible logging
