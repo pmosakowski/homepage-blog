@@ -11,9 +11,21 @@ from .views import  view_post
 
 class PostViewTest(TestCase):
     def setUp(self):
-        self.author = User.objects.create_user('mrauthor',
-                    'author@writers.com', 'pass', first_name='Mr', last_name='Author')
-        self.post_object = Post(title='A new post title!!',
+        self.author_credentials = {
+                'username': 'mrauthor',
+                'password': 'pass',
+        }
+
+        self.author = User.objects.create_user(
+                self.author_credentials['username'],
+                'author@writers.com',
+                self.author_credentials['password'],
+                first_name='Mr',
+                last_name='Author'
+        )
+
+        self.post_object = Post(
+                title='A new post title!!',
                 author = self.author,
                 content = 'Some post content here.',
                 link = title_to_link('A new post title!!'),
@@ -75,3 +87,17 @@ class PostViewTest(TestCase):
 
         response = self.client.get('/blog/%s/' % self.post_object.link)
         self.assertContains(response, 'tutorials')
+
+    def test_blog_view_displays_new_post_link_only_to_logged_in_users(self):
+        self.post_object.save()
+        # not logged in
+        self.client.logout()
+        response = self.client.get('/blog/%s/' % self.post_object.link)
+        self.assertNotContains(response, '<a href="/blog/new-post">New post',
+                status_code=200, html=True)
+
+        # logged in
+        self.client.login(**self.author_credentials)
+        response = self.client.get('/blog/%s/' % self.post_object.link)
+        self.assertContains(response, '<a href="/blog/new-post">New post',
+                status_code=200, html=True)
