@@ -93,7 +93,7 @@ class LoggedUserTest(LiveServerTestCase):
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
 
     # individual post views and direct links
-    def test_user_navigates_to_full_post_view(self):
+    def test_user_adds_post_and_navigates_to_full_post_view(self):
         self.browser.get(self.live_server_url + '/blog/new-post')
 
         # we add new post
@@ -102,7 +102,7 @@ class LoggedUserTest(LiveServerTestCase):
         post_form.find_element_by_id('id_post_title')\
                 .send_keys('This is an example post!')
         post_form.find_element_by_id('id_post_content')\
-                .send_keys('Lorem ipsum woodchuck chuck out of luck.')
+                .send_keys('Lorem ipsum woodchuck chuck out of luck. *boo!* __ah?__')
 
         # select 'publish' checkbox if it's not selected
         publish_checkbox = post_form.find_element_by_id('id_post_publish')
@@ -124,6 +124,9 @@ class LoggedUserTest(LiveServerTestCase):
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
+        # check if post content uses markdown
+        self.assertIn('<em>boo!</em>', page_body.text)
+        self.assertIn('<strong>ah?</strong>', page_body.text)
 
 
     def test_user_adds_posts_and_examines_extended_attributes(self):

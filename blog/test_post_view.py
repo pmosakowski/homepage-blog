@@ -27,7 +27,7 @@ class PostViewTest(TestCase):
         self.post_object = Post(
                 title='A new post title!!',
                 author = self.author,
-                content = 'Some post content here.',
+                content = 'Some post content here. ##Subheading##',
                 link = title_to_link('A new post title!!'),
                 publication_date = tz.make_aware(tz.datetime(2012,2,15,17,0,0)),
                 tags = 'programming web',
@@ -55,6 +55,12 @@ class PostViewTest(TestCase):
 
         expected_html = render_to_string('blog/view-post.html', {'post': self.post_object})
         self.assertEqual(response.content.decode(), expected_html)
+
+    def test_post_view_renders_markdown(self):
+        self.post_object.save()
+
+        response = view_post(HttpRequest, self.post_object.link)
+        self.assertContains(response, '<h2>Subheading</h2>', html=True)
 
     def test_post_view_uses_correct_templates(self):
         self.post_object.save()
