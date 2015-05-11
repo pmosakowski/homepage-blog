@@ -11,8 +11,16 @@ from .models import Post, title_to_link
 
 class BlogTest(TestCase):
     def setUp(self):
-        self.author = User.objects.create_user('mrauthor',
-                'author@writers.com', 'pass')
+        self.author_credentials = {
+                'username': 'mrauthor',
+                'password': 'pass',
+        }
+
+        self.author = User.objects.create_user(
+                self.author_credentials['username'],
+                'author@writers.com', 
+                self.author_credentials['password']
+        )
 
     def test_blog_url_resolves_to_blog_view(self):
         found = resolve('/blog')
@@ -42,9 +50,16 @@ class BlogTest(TestCase):
 
         self.assertTemplateUsed(response, 'blog/post.html')
 
-    def test_blog_view_has_new_post_link(self):
+    def test_blog_view_displays_new_post_link_only_to_logged_in_users(self):
+        # not logged in
+        self.client.logout()
         response = self.client.get('/blog')
+        self.assertNotContains(response, '<a href="/blog/new-post">New post',
+                status_code=200, html=True)
 
+        # logged in
+        self.client.login(**self.author_credentials)
+        response = self.client.get('/blog')
         self.assertContains(response, '<a href="/blog/new-post">New post',
                 status_code=200, html=True)
 
@@ -85,7 +100,7 @@ class BlogTest(TestCase):
                             title='A new post title.',
                             content='Some post content here.',
                             category='Some category',
-                            publication_date=(dtz.now() + dtz.timedelta(days=1)),
+                            publication_date=(dtz.now() + dtz.timedelta(days=1)), # publish tomorrow
                             publish=True,
         )
 
