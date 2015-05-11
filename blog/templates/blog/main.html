@@ -6,7 +6,9 @@
 
 {% block menu %}
     <ul class=menu>
-        <li><a href="/blog/new-post">New post</a></li>
+        {% if user.is_authenticated %}
+            <li><a href="/blog/new-post">New post</a></li>
+        {% endif %}
     </ul>
 {% endblock %}
 
