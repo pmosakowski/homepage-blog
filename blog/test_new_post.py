@@ -99,7 +99,7 @@ class NewPostTest(TestCase):
         self.assertEqual(self.post_data['post_publication_date'], post.publication_date.strftime('%Y-%m-%d %H:%M:%S'))
         self.assertEqual(True, post.publish)
         self.assertEqual(self.post_data['post_tags'], post.tags)
-        self.assertEqual(self.post_data['post_category'], post.category)
+        self.assertEqual(self.post_data['post_category'], str(post.category))
 
     def test_new_post_view_doesnt_save_empty_posts(self):
         self.request.method = 'POST'

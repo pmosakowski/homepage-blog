@@ -37,7 +37,7 @@ class TestIntegration(TestCase):
         self.assertEquals(self.new_post['post_title'], post.title)
         self.assertEquals(self.new_post['post_content'], post.content)
         self.assertEquals(self.new_post['post_publication_date'], localtime(post.publication_date).strftime('%Y-%m-%d %H:%M:%S'))
-        self.assertEquals(self.new_post['post_category'], post.category)
+        self.assertEquals(self.new_post['post_category'], str(post.category))
         self.assertEquals(self.new_post['post_tags'], post.tags)
 
     def test_submitting_a_new_post(self):

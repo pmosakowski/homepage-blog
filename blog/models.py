@@ -4,6 +4,22 @@ from django.db import models
 from django.contrib.auth.models import User
 import re
 
+class Category(models.Model):
+    name = models.CharField(max_length=512)
+
+    @classmethod
+    def get(cls, name):
+        # create new category only if not present
+        if Category.objects.filter(name=name).exists():
+            category = Category.objects.get(name=name)
+        else:
+            category = Category(name=name)
+            category.save()
+        return category
+
+    def __str__(self):
+        return self.name
+
 class Post(models.Model):
     author = models.ForeignKey(User)
 
@@ -18,8 +34,8 @@ class Post(models.Model):
     modification_date = models.DateTimeField(auto_now=True)
 
     tags = models.CharField(blank=True,max_length=512)
-    category = models.CharField(blank=True,max_length=512)
-
+    # we allow posts without category
+    category = models.ForeignKey(Category,null=True,blank=True)
     
     def save(self, *args, **kwargs):
         self.__fill_pub_date()
@@ -28,9 +44,6 @@ class Post(models.Model):
     def __fill_pub_date(self):
         if self.publication_date is None and self.publish is True:
                 self.publication_date = dtz.now()
-
-class Category(models.Model):
-    name = models.CharField(max_length=512)
 
 def title_to_link(title):
     #to lowercase

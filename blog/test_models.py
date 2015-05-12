@@ -19,13 +19,13 @@ class PostModelTest(TestCase):
         self.post1.publication_date = dtz.now()
 
         self.post1.tags = "programming linux"
-        self.post1.category = self.category
 
     def test_can_save_post_models(self):
         # no posts or categories in the database
         self.assertEqual(Post.objects.all().count(), 0)
         self.assertEqual(Category.objects.all().count(), 0)
 
+        self.post1.category = Category.get('Tutorial')
         self.post1.full_clean()
         self.post1.save()
         # was new post created
@@ -71,7 +71,7 @@ class PostModelTest(TestCase):
             publication_date = None,
             publish = True,
             tags = "test model django",
-            category = "programming",
+            category = Category.get("programming"),
         )
 
         post = Post.objects.get(title='Some title, not important')
@@ -89,7 +89,7 @@ class PostModelTest(TestCase):
             publication_date = None,
             publish = False,
             tags = "test model django",
-            category = "programming",
+            category = Category.get("programming"),
         )
 
         post = Post.objects.get(title='Some title, not important')
@@ -106,3 +106,15 @@ class CategoryModelTest(TestCase):
         self.assertEquals(0, Category.objects.all().count())
         self.category.save()
         self.assertEquals(1, Category.objects.all().count())
+
+    def test_retrieve_instead_of_duplicating_categories(self):
+        self.assertEquals(0, Category.objects.all().count())
+
+        cat1 = Category.get('Tutorial')
+        self.assertEquals(1, Category.objects.all().count())
+
+        cat2 = Category.get('Programming')
+        self.assertEquals(2, Category.objects.all().count())
+
+        cat1 = Category.get('Tutorial')
+        self.assertEquals(2, Category.objects.all().count())

@@ -7,7 +7,7 @@ from django.utils import timezone as dtz
 from django.contrib.auth.models import User
 
 from .views import blog_main
-from .models import Post, title_to_link
+from .models import Post, Category, title_to_link
 
 class BlogTest(TestCase):
     def setUp(self):
@@ -86,7 +86,7 @@ class BlogTest(TestCase):
         Post.objects.create(author=self.author,
                             title='A new post title.',
                             content='Some post content here.',
-                            category='Some category',
+                            category=Category.get('Some category'),
                             publication_date=dtz.now(),
                             publish=False,
         )
@@ -99,7 +99,7 @@ class BlogTest(TestCase):
         Post.objects.create(author=self.author,
                             title='A new post title.',
                             content='Some post content here.',
-                            category='Some category',
+                            category=Category.get('Some category'),
                             publication_date=(dtz.now() + dtz.timedelta(days=1)), # publish tomorrow
                             publish=True,
         )
@@ -112,7 +112,7 @@ class BlogTest(TestCase):
         Post.objects.create(author=self.author,
                             title='A new post title.',
                             content='Some post content here.',
-                            category='Some category',
+                            category=Category.get('Some category'),
                             publish=True,
         )
 

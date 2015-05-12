@@ -6,7 +6,7 @@ from django.utils import timezone as tz
 
 from django.contrib.auth.models import User
 
-from .models import Post,title_to_link
+from .models import Post, Category,title_to_link
 from .views import  view_post
 
 class PostViewTest(TestCase):
@@ -31,7 +31,7 @@ class PostViewTest(TestCase):
                 link = title_to_link('A new post title!!'),
                 publication_date = tz.make_aware(tz.datetime(2012,2,15,17,0,0)),
                 tags = 'programming web',
-                category = 'tutorials'
+                category = Category.get('tutorials')
         )
 
     def test_post_is_assigned_a_link_name(self):
