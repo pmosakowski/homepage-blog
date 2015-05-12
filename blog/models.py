@@ -6,6 +6,7 @@ import re
 
 class Category(models.Model):
     name = models.CharField(max_length=512)
+    link = models.CharField(max_length=512)
 
     @classmethod
     def get(cls, name):
@@ -14,6 +15,7 @@ class Category(models.Model):
             category = Category.objects.get(name=name)
         else:
             category = Category(name=name)
+            category.link = title_to_link(category.name)
             category.save()
         return category
 
