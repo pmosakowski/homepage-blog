@@ -4,10 +4,6 @@
     <Title>Add new post</title>
 {% endblock %}
 
-{% block menu %}
-    <a href="/blog/new-post">Add new post</a>
-{% endblock %}
-
 {% block content %}
     <form id="id_new_post" method="POST">
         {% csrf_token %}
