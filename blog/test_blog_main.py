@@ -132,5 +132,5 @@ class BlogTest(TestCase):
 
         response = blog_main(HttpRequest())
 
-        self.assertContains(response,"<a href=\"/blog/a-new-post-title/\"> \
+        self.assertContains(response,"<a href=\"/blog/post/a-new-post-title/\"> \
                 <h1>A new post title.</h1></a>",html=True)
