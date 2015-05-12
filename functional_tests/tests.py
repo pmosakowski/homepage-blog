@@ -135,8 +135,9 @@ class LoggedUserTest(LiveServerTestCase):
         view_post_link = self.browser.find_element_by_link_text('This is an example post!')
         view_post_link.click()
 
+        self.assertNotIn('Not Found', self.browser.page_source)
         self.assertEqual(self.browser.current_url, 
-                         self.live_server_url + '/blog/this-is-an-example-post/')
+                         self.live_server_url + '/blog/post/this-is-an-example-post/')
 
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('This is an example post!', page_body.text)
@@ -161,6 +162,7 @@ class LoggedUserTest(LiveServerTestCase):
         publish_date_input = post_form.find_element_by_id('id_post_publication_date')
         now = dtz.now().strftime('%Y-%m-%d %H:%M:%S')
         publish_date_input.send_keys(now)
+        post_form.find_element_by_id('id_post_publish').click()
         # set category 
         category_input = post_form.find_element_by_id('id_post_category')
         category_input.send_keys('Life stories')
@@ -170,7 +172,8 @@ class LoggedUserTest(LiveServerTestCase):
         # submit
         post_form.find_element_by_id('id_submit').click()
 
-        self.browser.get(self.live_server_url + '/blog/i-didnt-ask-for-this/')
+        self.browser.find_element_by_link_text('I didn\'t ask for this!').click()
+        self.assertNotIn('Not Found', self.browser.page_source)
         page_body = self.browser.find_element_by_tag_name('body')
 
         self.assertIn('I didn\'t ask for this!', page_body.text)
