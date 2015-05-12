@@ -47,7 +47,7 @@ class TestIntegration(TestCase):
         self.assertRedirects(response, '/blog')
 
         post_link = Post.objects.all()[0].link
-        response = c.get('/blog/%s/' % post_link)
+        response = c.get('/blog/post/%s/' % post_link)
         # check if post displays all the elements
         for key in self.new_post:
             if key == 'post_publication_date':

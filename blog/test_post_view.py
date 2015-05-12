@@ -39,7 +39,7 @@ class PostViewTest(TestCase):
         self.assertEqual(post.link, 'a-new-post-title')
 
     def test_post_url_resolves_to_post_view(self):
-        found = resolve('/blog/%s/' % self.post_object.link)
+        found = resolve('/blog/post/%s/' % self.post_object.link)
 
         self.assertEqual(found.func, view_post)
 
@@ -54,36 +54,36 @@ class PostViewTest(TestCase):
         self.assertContains(response, '<h2>Subheading</h2>', html=True)
 
     def test_post_view_uses_correct_templates(self):
-        response = self.client.get('/blog/a-new-post-title/')
+        response = self.client.get('/blog/post/a-new-post-title/')
         self.assertTemplateUsed(response, 'blog/main.html')
         self.assertTemplateUsed(response, 'blog/view-post.html')
         self.assertTemplateUsed(response, 'blog/post.html')
 
     def test_post_has_an_individual_link(self):
-        response = self.client.get('/blog/a-new-post-title/')
+        response = self.client.get('/blog/post/a-new-post-title/')
         self.assertIn('A new post title!!', response.content.decode())
 
     def test_post_displays_publication_date(self):
-        response = self.client.get('/blog/a-new-post-title/')
+        response = self.client.get('/blog/post/a-new-post-title/')
         self.assertIn('2012-02-15', response.content.decode())
 
     def test_post_displays_author(self):
-        response = self.client.get('/blog/a-new-post-title/')
+        response = self.client.get('/blog/post/a-new-post-title/')
         self.assertIn('by Mr Author', response.content.decode())
 
     def test_post_displays_category(self):
-        response = self.client.get('/blog/%s/' % self.post_object.link)
+        response = self.client.get('/blog/post/%s/' % self.post_object.link)
         self.assertContains(response, 'tutorials')
 
     def test_blog_view_displays_new_post_link_only_to_logged_in_users(self):
         # not logged in
         self.client.logout()
-        response = self.client.get('/blog/%s/' % self.post_object.link)
+        response = self.client.get('/blog/post/%s/' % self.post_object.link)
         self.assertNotContains(response, '<a href="/blog/new-post">New post',
                 status_code=200, html=True)
 
         # logged in
         self.client.login(**self.author_credentials)
-        response = self.client.get('/blog/%s/' % self.post_object.link)
+        response = self.client.get('/blog/post/%s/' % self.post_object.link)
         self.assertContains(response, '<a href="/blog/new-post">New post',
                 status_code=200, html=True)
