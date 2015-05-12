@@ -10,12 +10,13 @@ class Category(models.Model):
 
     @classmethod
     def get(cls, name):
+        link = title_to_link(name)
         # create new category only if not present
-        if Category.objects.filter(name=name).exists():
-            category = Category.objects.get(name=name)
+        if Category.objects.filter(link=link).exists():
+            category = Category.objects.get(link=link)
         else:
             category = Category(name=name)
-            category.link = title_to_link(category.name)
+            category.link = link
             category.save()
         return category
 
