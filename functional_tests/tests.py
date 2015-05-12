@@ -63,6 +63,12 @@ class LoggedUserTest(LiveServerTestCase):
         self.browser.get(self.live_server_url + '/blog')
         self.assertIn('Blog', self.browser.title)
 
+        # categories are displayed, they will be empty now
+        category_list = self.browser.find_elements_by_id('categories')
+        self.assertEqual(1, len(category_list))
+        categories = category_list[0].find_elements_by_class_name('category')
+        self.assertEqual(0, len(categories))
+
         add_post_link = self.browser.find_element_by_link_text('New post')
         add_post_link.click()
 
@@ -78,6 +84,8 @@ class LoggedUserTest(LiveServerTestCase):
                 .send_keys('This is an example post!')
         post_form.find_element_by_id('id_post_content')\
                 .send_keys('Lorem ipsum woodchuck chuck out of luck.')
+        post_form.find_element_by_id('id_post_category')\
+                .send_keys('Programming')
         
         # select 'publish' checkbox if it's not selected
         publish_checkbox = post_form.find_element_by_id('id_post_publish')
@@ -91,6 +99,15 @@ class LoggedUserTest(LiveServerTestCase):
         page_body = self.browser.find_element_by_tag_name('body')
         self.assertIn('This is an example post!', page_body.text)
         self.assertIn('Lorem ipsum woodchuck chuck out of luck.', page_body.text)
+
+        # post categories are visible
+        categories = self.browser.find_element_by_id('categories')
+        # category link present
+        category = categories.find_elements_by_link_text('Programming')
+        self.assertEquals(1, len(category))
+        # check category link url
+        category_url = category[0].get_attribute("href")
+        self.assertIn("/blog/category/programming/", category_url)
 
     # individual post views and direct links
     def test_user_adds_post_and_navigates_to_full_post_view(self):
