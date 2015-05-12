@@ -118,3 +118,14 @@ class CategoryModelTest(TestCase):
 
         cat1 = Category.get('Tutorial')
         self.assertEquals(2, Category.objects.all().count())
+
+    def test_create_link_from_category_name(self):
+        cat1 = Category.get('Programming tutorial')
+        self.assertEquals('programming-tutorial', cat1.link)
+
+        cat2 = Category.get('General')
+        self.assertNotEquals('General', cat2.link)
+        self.assertEquals('general', cat2.link)
+
+        cat3 = Category.get('Search&Rescue')
+        self.assertEquals('search-rescue', cat3.link)
