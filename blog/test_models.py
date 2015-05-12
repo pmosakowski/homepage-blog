@@ -94,7 +94,9 @@ class CategoryModelTest(TestCase):
                 name = 'Random',
         )
 
-    def can_save_category_models(self):
-        self.assertEquals(0, Category.objects.all().cont())
+    def test_can_save_category_models(self):
+        self.assertEquals(0, Category.objects.all().count())
         self.category.save()
-        self.assertEquals(1, Category.objects.all().cont())
+        self.assertEquals(1, Category.objects.all().count())
+
+    
