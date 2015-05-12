@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import django.utils.timezone as dtz
+from django.views.generic.detail import DetailView
 
 from django.contrib.auth.decorators import login_required
 
@@ -39,3 +40,6 @@ def view_post(request,post_link):
     post = Post.objects.get(link=post_link)
 
     return render(request, 'blog/view-post.html',{'post':post})
+
+class CategoryDetailView(DetailView):
+    model = Category
