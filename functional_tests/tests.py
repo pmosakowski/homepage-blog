@@ -1,7 +1,6 @@
 from time import sleep
 
 from django.test import LiveServerTestCase
-from django.utils.unittest import skip
 from selenium import webdriver
 
 import django.utils.timezone as dtz
