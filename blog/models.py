@@ -29,6 +29,9 @@ class Post(models.Model):
         if self.publication_date is None and self.publish is True:
                 self.publication_date = dtz.now()
 
+class Category(models.Model):
+    name = models.CharField(max_length=512)
+
 def title_to_link(title):
     #to lowercase
     title = title.lower()

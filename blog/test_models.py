@@ -2,7 +2,7 @@ import django.utils.timezone as dtz;
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from .models import Post, title_to_link
+from .models import Post, Category, title_to_link
 
 
 class PostModelTest(TestCase):
@@ -87,3 +87,14 @@ class PostModelTest(TestCase):
         post = Post.objects.get(title='Some title, not important')
         self.assertIsNotNone(post)
         self.assertIsNone(post.publication_date)
+
+class CategoryModelTest(TestCase):
+    def setUp(self):
+        self.category = Category(
+                name = 'Random',
+        )
+
+    def can_save_category_models(self):
+        self.assertEquals(0, Category.objects.all().cont())
+        self.category.save()
+        self.assertEquals(1, Category.objects.all().cont())
