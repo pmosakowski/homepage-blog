@@ -4,9 +4,12 @@ from django.contrib.auth.models import User
 
 from .models import Post, Category, title_to_link
 
-
 class PostModelTest(TestCase):
     def setUp(self):
+        self.category = Category(
+                name = 'Tutorial'
+        )
+
         self.post1 = Post()
         self.post1.author = User.objects.create_user('mrauthor',
                 'author@writers.com', 'pass')
@@ -16,14 +19,19 @@ class PostModelTest(TestCase):
         self.post1.publication_date = dtz.now()
 
         self.post1.tags = "programming linux"
-        self.post1.category = "Tutorial"
+        self.post1.category = self.category
 
     def test_can_save_post_models(self):
-
+        # no posts or categories in the database
         self.assertEqual(Post.objects.all().count(), 0)
+        self.assertEqual(Category.objects.all().count(), 0)
+
         self.post1.full_clean()
         self.post1.save()
+        # was new post created
         self.assertEqual(Post.objects.all().count(), 1)
+        # was new category created
+        self.assertEqual(Category.objects.all().count(), 1)
 
     def test_can_retrieve_post_models(self):
 
@@ -98,5 +106,3 @@ class CategoryModelTest(TestCase):
         self.assertEquals(0, Category.objects.all().count())
         self.category.save()
         self.assertEquals(1, Category.objects.all().count())
-
-    
