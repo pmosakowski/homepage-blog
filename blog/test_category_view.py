@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 
 from .models import Category, Post
-from .views import CategoryDetailView
+from .views import CategoryDetailView, CategoryListView
 
 class CategoryDetailViewTest(TestCase):
     def setUp(self):
@@ -65,3 +65,12 @@ class CategoryDetailViewTest(TestCase):
 
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, 'blog/main.html')
+
+class CategoryListViewTest(TestCase):
+
+    def test_url_resolves_to_correct_view(self):
+        view = resolve('/blog/categories/')
+        view2 = resolve('/blog/categories')
+
+        self.assertEqual(CategoryListView.as_view().__name__, view.func.__name__)
+        self.assertEqual(view.func.__name__, view2.func.__name__)

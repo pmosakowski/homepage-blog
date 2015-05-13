@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 import django.utils.timezone as dtz
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 from django.contrib.auth.decorators import login_required
 
@@ -50,3 +51,6 @@ class CategoryDetailView(DetailView):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['posts'] = Category.objects.get(link=context['category'].link).post_set.all()
         return context
+
+class CategoryListView(ListView):
+    model = Category
