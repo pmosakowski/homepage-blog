@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^logout$','mainpage.views.logout_page', name='logout'),
 
     url(r'^blog', include('blog.urls')),
+    url(r'^contact', include('contactform.urls')),
     # url(r'^homepage/', include('homepage.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
