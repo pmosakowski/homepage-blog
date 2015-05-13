@@ -142,6 +142,7 @@ INSTALLED_APPS = (
     'blog',
     'functional_tests',
     'mytags',
+    'contactform',
     # enable python-markdown2 integration
     'markdown_deux',
 )

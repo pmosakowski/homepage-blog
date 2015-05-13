@@ -5,3 +5,4 @@ from .forms import ContactForm
 # Create your views here.
 class ContactFormView(FormView):
     form_class = ContactForm
+    template_name = 'contactform/contact.html'
