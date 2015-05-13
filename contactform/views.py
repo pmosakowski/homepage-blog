@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
 
+from .forms import ContactForm
 # Create your views here.
-class ContactFormView(TemplateView):
-    pass
+class ContactFormView(FormView):
+    form_class = ContactForm
