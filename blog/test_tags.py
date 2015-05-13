@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.template import Template, Context
 
 from .templatetags.blog_tags import category_list
 from .models import Category
@@ -16,3 +17,10 @@ class CategoryListTagView(TestCase):
 
         self.assertEqual(db_cat_count, tag_cat_count)
         self.assertEqual(3, tag_cat_count)
+
+        TEMPLATE = Template("{% load blog_tags %} {% category_list %}")
+        result = TEMPLATE.render(Context({}))
+
+        self.assertIn('Programming', result)
+        self.assertIn('Business', result)
+        self.assertIn('System administration', result)
