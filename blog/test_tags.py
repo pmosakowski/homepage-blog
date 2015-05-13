@@ -21,6 +21,7 @@ class CategoryListTagView(TestCase):
         TEMPLATE = Template("{% load blog_tags %} {% category_list %}")
         result = TEMPLATE.render(Context({}))
 
-        self.assertIn('Programming', result)
-        self.assertIn('Business', result)
-        self.assertIn('System administration', result)
+        self.assertInHTML('<h1> Categories </h1>', result)
+        self.assertInHTML("<li><a href='/blog/category/programming/'>Programming</a></li>", result)
+        self.assertInHTML("<li><a href='/blog/category/business/'>Business</a></li>", result)
+        self.assertInHTML("<li><a href='/blog/category/system-administration/'>System administration</a></li>", result)
