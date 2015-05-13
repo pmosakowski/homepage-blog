@@ -3,13 +3,32 @@ from django.test import TestCase, Client
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 from django.template.loader import render_to_string
+from django.contrib.auth.models import User
 
-from .models import Category
+from .models import Category, Post
 from .views import CategoryDetailView
 
-class CategoryViewTest(TestCase):
+class CategoryDetailViewTest(TestCase):
     def setUp(self):
-        self.category = Category.get('Programming')
+        author = User.objects.create_user(
+                    'user1',
+                    'user@example.com',
+                    'pass'
+        )
+        self.post = Post.objects.create(
+            author=author,
+            title='This is a programming article',
+            content='Article content',
+            publish=True,
+            category=Category.get('Programming'),
+        )
+        Post.objects.create(
+            author=author,
+            title='This is a knitting tutorial',
+            content='Tutorial content',
+            publish=True,
+            category=Category.get('Knitting'),
+        )
 
     def test_url_resolves_to_correct_view(self):
         view = resolve('/blog/category/programming/') 
@@ -23,9 +42,22 @@ class CategoryViewTest(TestCase):
         request.method = "GET"
 
         response = CategoryDetailView.as_view()(request, slug='programming').render()
-        expected_html = render_to_string('blog/category_detail.html')
+        render_dict = {
+                'category': Category.get('Programming'),
+                'posts': Category.get('Programming').post_set.all(),
+        }
+        expected_html = render_to_string('blog/category_detail.html', render_dict)
 
         self.assertEqual(expected_html, response.content.decode())
+
+        # check diplayed fields
+        self.assertContains(response, 'Programming')
+
+        # displays first post
+        self.assertContains(response, 'This is a programming article')
+
+        # doesn't display post belonging to another category
+        self.assertNotContains(response, 'This is a knitting tutorial')
 
     def test_view_inherits_main_blog_template(self):
         c = Client()

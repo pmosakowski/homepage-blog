@@ -1,1 +1,9 @@
 {% extends 'blog/main.html' %}
+
+{% block content %}
+    <h1>{{ category.name }}</h1>
+
+    {% for post in posts %}
+        {{ post.title }}
+    {% endfor %}
+{% endblock %}

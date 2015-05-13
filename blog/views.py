@@ -43,4 +43,10 @@ def view_post(request,post_link):
 
 class CategoryDetailView(DetailView):
     model = Category
+    context_object_name = 'category'
     slug_field = 'link'
+
+    def get_context_data(self, **kwargs):
+        context = super(CategoryDetailView, self).get_context_data(**kwargs)
+        context['posts'] = Category.objects.get(link=context['category'].link).post_set.all()
+        return context
