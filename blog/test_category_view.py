@@ -20,9 +20,9 @@ class CategoryViewTest(TestCase):
 
     def test_url_returns_correct_html(self):
         request = HttpRequest()
-        request.method = "POST"
+        request.method = "GET"
 
-        response = CategoryDetailView.as_view()(request)
+        response = CategoryDetailView.as_view()(request, slug='programming').render()
         expected_html = render_to_string('blog/category_detail.html')
 
         self.assertEqual(expected_html, response.content.decode())
