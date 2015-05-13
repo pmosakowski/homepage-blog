@@ -59,12 +59,13 @@ class CategoryDetailViewTest(TestCase):
         # doesn't display post belonging to another category
         self.assertNotContains(response, 'This is a knitting tutorial')
 
-    def test_view_inherits_main_blog_template(self):
+    def test_view_inherits_correct_templates(self):
         c = Client()
         response = c.get('/blog/category/programming/')
 
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, 'blog/main.html')
+        self.assertTemplateUsed(response, 'blog/post.html')
 
 class CategoryListViewTest(TestCase):
 
