@@ -51,6 +51,3 @@ class CategoryDetailView(DetailView):
         context = super(CategoryDetailView, self).get_context_data(**kwargs)
         context['posts'] = Category.objects.get(link=context['category'].link).post_set.all()
         return context
-
-class CategoryListView(ListView):
-    model = Category
