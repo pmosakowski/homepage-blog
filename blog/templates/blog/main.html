@@ -1,5 +1,7 @@
 {% extends 'mainpage/base.html' %}
 
+{% load blog_tags %}
+
 {% block title %}
     <Title>Blog</title>
 {% endblock %}
@@ -13,6 +15,9 @@
 {% endblock %}
 
 {% block content %}
+    <div>
+        {% category_list %}
+    </div>
     {% for post in posts %}
         {% include 'blog/post.html' %}
     {% endfor %}

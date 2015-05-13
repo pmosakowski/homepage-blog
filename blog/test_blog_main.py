@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
+from django.template import Template, Context
 from django.template.loader import render_to_string
 from django.utils import timezone as dtz
 
@@ -134,3 +135,14 @@ class BlogTest(TestCase):
 
         self.assertContains(response,"<a href=\"/blog/post/a-new-post-title/\"> \
                 <h1>A new post title.</h1></a>",html=True)
+
+    def test_view_displays_category_list(self):
+        Category.get('Programming')
+        Category.get('Tutorials')
+
+        response = blog_main(HttpRequest())
+
+        TEMPLATE = Template("{% load blog_tags %} {% category_list %}")
+        tag_html = TEMPLATE.render(Context({}))
+
+        self.assertIn(tag_html, response.content.decode())
