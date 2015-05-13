@@ -43,3 +43,4 @@ def view_post(request,post_link):
 
 class CategoryDetailView(DetailView):
     model = Category
+    slug_field = 'link'
