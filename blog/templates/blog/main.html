@@ -15,9 +15,7 @@
 {% endblock %}
 
 {% block content %}
-    <div>
-        {% category_list %}
-    </div>
+    {% category_list %}
     {% for post in posts %}
         {% include 'blog/post.html' %}
     {% endfor %}

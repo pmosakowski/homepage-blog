@@ -1,7 +1,9 @@
-<h1>Categories</h1>
+<div id="categories">
+    <h1>Categories</h1>
 
-<ul>
-    {% for category in categories %}
-        <li><a href="/blog/category/{{ category.link }}/">{{ category.name }}</a></li>
-    {% endfor %}
-</ul>
+    <ul>
+        {% for category in categories %}
+            <li><a href="/blog/category/{{ category.link }}/">{{ category.name }}</a></li>
+        {% endfor %}
+    </ul>
+</div>

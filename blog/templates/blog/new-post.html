@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+    <h1>Add new post</h1>
     <form id="id_new_post" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
