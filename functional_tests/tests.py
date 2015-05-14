@@ -57,6 +57,7 @@ class VisitorTest(LiveServerTestCase):
 
         # check redirect on success
         self.assertEqual(self.live_server_url + '/contact/thanks', self.browser.current_url)
+        self.assertIn('Thank you', self.browser.title)
 
 class LoggedUserTest(LiveServerTestCase):
 
