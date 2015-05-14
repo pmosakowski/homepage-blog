@@ -43,3 +43,13 @@ class ContactFormTest(TestCase):
         response = Client().get('/contact')
 
         self.assertTemplateUsed(response, 'mainpage/main.html')
+
+    def test_contact_form_redirects_on_success(self):
+        contact_request = {
+                'subject': 'Some subject',
+                'message': 'A message goes here',
+                'contact_email': 'mrpopo@example.com',
+        }
+
+        response = Client().post('/contact', contact_request)
+        self.assertRedirects(response, '/contact/thanks')

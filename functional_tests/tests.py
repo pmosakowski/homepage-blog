@@ -45,6 +45,7 @@ class VisitorTest(LiveServerTestCase):
 
         self.assertIn('Contact', self.browser.title)
 
+        # fill out the form
         page_body = self.browser.find_element_by_tag_name('body')
         page_body.find_element_by_id('id_subject').\
                 send_keys('message subject')
@@ -54,8 +55,9 @@ class VisitorTest(LiveServerTestCase):
                 send_keys('carebear@example.com')
         page_body.find_element_by_id('id_submit').click()
 
-        # TODO
-        self.fail("Add redirection test")
+        # check redirect on success
+        self.assertEqual(self.live_server_url + '/contact/thanks', self.browser.current_url)
+
 class LoggedUserTest(LiveServerTestCase):
 
     def setUp(self):
