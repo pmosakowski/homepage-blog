@@ -62,9 +62,24 @@ div {
     margin-bottom: 20px;
 }
 
-#content div {
-    margin: 20px 10px;;
-    padding: 5px;
+#categories {
+    float: right;
+    width: 200px;
+    padding: 20px;
+
+    background-color: #dddddd;
+}
+
+#categories h1 {
+    font-size: 150%;
+}
+
+#categories ul {
+    list-style-type: none;
+}
+
+#categories a {
+    display: block;
 }
 
 h1.header {
@@ -88,19 +103,12 @@ ul.menu {
     float: left;
 }
 
-.menu a {
+.menu a:link, .menu a:visited {
     display: block;
-    width: 60px;
     padding: 5px;
 
-    /*
-    background-color: #009900;
-    */
-
-    border-style: solid;
-    border-width: 0px 1px 0px 0px;
-    border-color: black;
-
+    color: #ffffff;
+    text-decoration: none;
     text-align: center;
 }
 
@@ -111,10 +119,21 @@ ul.menu {
 
 
 a:link,a:visited {
-/*    color: #bb0000;*/
+    color: #000000;
     text-decoration: none;
 }
 
 a:hover,a:active {
     text-decoration: underline;
+}
+
+form p {
+    margin-bottom: 20px;
+    clear: both;
+}
+
+form label {
+    float: left;
+    display: block;
+    width: 100px;
 }
