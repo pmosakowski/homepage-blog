@@ -1,4 +1,5 @@
 from django.test import TestCase, Client
+from django.core import mail
 
 from django.template.loader import render_to_string
 from django.core.urlresolvers import resolve
@@ -53,6 +54,18 @@ class ContactFormTest(TestCase):
 
         response = Client().post('/contact', contact_request)
         self.assertRedirects(response, '/contact/thanks')
+
+    def test_contact_form_sends_an_email(self):
+        contact_request = {
+                'subject': 'Some subject',
+                'message': 'A message goes here',
+                'contact_email': 'mrpopo@example.com',
+        }
+
+        self.assertEqual(0, len(mail.outbox))
+        response = Client().post('/contact', contact_request)
+        self.assertEqual(1, len(mail.outbox))
+        self.assertEqual(contact_request['subject'], mail.outbox[0].subject)
 
 class ThanksViewTest(TestCase):
     def test_url_resolves_to_thanks_view(self):
