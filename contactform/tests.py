@@ -5,7 +5,7 @@ from django.core.urlresolvers import resolve
 from django.http import HttpRequest
 # Create your tests here.
 
-from .views import ContactFormView
+from .views import ContactFormView, ThanksView
 from .forms import ContactForm
 
 class ContactFormTest(TestCase):
@@ -53,3 +53,18 @@ class ContactFormTest(TestCase):
 
         response = Client().post('/contact', contact_request)
         self.assertRedirects(response, '/contact/thanks')
+
+class ThanksViewTest(TestCase):
+    def test_url_resolves_to_thanks_view(self):
+        view = resolve('/contact/thanks')
+
+        self.assertEqual(ThanksView.as_view().__name__, view.func.__name__)
+
+    def test_url_renders_correct_html(self):
+        request = HttpRequest()
+        request.method = "GET"
+
+        response = ThanksView.as_view()(request).render()
+        expected_html = render_to_string('contactform/thanks.html')
+
+        self.assertEqual(expected_html, response.content.decode())
