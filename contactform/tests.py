@@ -61,10 +61,8 @@ class ThanksViewTest(TestCase):
         self.assertEqual(ThanksView.as_view().__name__, view.func.__name__)
 
     def test_url_renders_correct_html(self):
-        request = HttpRequest()
-        request.method = "GET"
-
-        response = ThanksView.as_view()(request).render()
+        response = Client().get('/contact/thanks')
         expected_html = render_to_string('contactform/thanks.html')
 
         self.assertEqual(expected_html, response.content.decode())
+        self.assertTemplateUsed(response, 'mainpage/main.html')
