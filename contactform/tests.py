@@ -19,7 +19,7 @@ class ContactFormTest(TestCase):
         request.method = "GET"
 
         response = ContactFormView.as_view()(request).render()
-        expected_html = render_to_string('contactform/contact.html')
+        expected_html = render_to_string('contactform/contact.html',{'form':ContactForm()})
 
         self.assertEqual(expected_html, response.content.decode())
 

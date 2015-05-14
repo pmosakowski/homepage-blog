@@ -1,3 +1,12 @@
 {% block title %}
     <title>Contact</title>
 {% endblock %}
+
+{% block content %}
+    <h1>Contact me</h1>
+    <form id="id_contact_form" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input id="id_submit" type="submit" value="Send"/>
+    </form>
+{% endblock %}

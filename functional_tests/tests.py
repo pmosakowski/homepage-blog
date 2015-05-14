@@ -39,7 +39,10 @@ class VisitorTest(LiveServerTestCase):
         self.assertIn('About this page', heading.text)
 
     def test_visitor_uses_contact_page(self):
-        self.browser.get(self.live_server_url + '/contact')
+        # Ramon navigates to the page and checks its title
+        self.browser.get(self.live_server_url)
+        self.browser.find_element_by_link_text('Contact').click()
+
         self.assertIn('Contact', self.browser.title)
 
         page_body = self.browser.find_element_by_tag_name('body')
@@ -52,7 +55,7 @@ class VisitorTest(LiveServerTestCase):
         page_body.find_element_by_id('id_submit').click()
 
         # TODO
-        self.assertFail("Add redirection test")
+        self.fail("Add redirection test")
 class LoggedUserTest(LiveServerTestCase):
 
     def setUp(self):
