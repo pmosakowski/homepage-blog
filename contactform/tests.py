@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
 from django.template.loader import render_to_string
 from django.core.urlresolvers import resolve
@@ -39,4 +39,7 @@ class ContactFormTest(TestCase):
         self.assertIn('id_message', form_html)
         self.assertIn('id_contact_email', form_html)
 
-    #def test_contact_form_uses_main_application_template
+    def test_contact_form_uses_main_application_template(self):
+        response = Client().get('/contact')
+
+        self.assertTemplateUsed(response, 'mainpage/main.html')
