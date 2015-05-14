@@ -18,8 +18,19 @@ class ContactFormTest(TestCase):
         request = HttpRequest()
         request.method = "GET"
 
-        response = ContactFormView.as_view()(request)
+        response = ContactFormView.as_view()(request).render()
         expected_html = render_to_string('contactform/contact.html')
+
+        self.assertEqual(expected_html, response.content.decode())
+
+    def test_view_renders_form_html(self):
+        form_html = ContactForm().as_p()
+
+        request = HttpRequest()
+        request.method = "GET"
+        response = ContactFormView.as_view()(request).render()
+
+        self.assertIn(form_html, response.content.decode())
 
     def test_contact_form_renders_required_fields(self):
         form_html = ContactForm().as_p()
@@ -27,3 +38,5 @@ class ContactFormTest(TestCase):
         self.assertIn('id_subject', form_html)
         self.assertIn('id_message', form_html)
         self.assertIn('id_contact_email', form_html)
+
+    #def test_contact_form_uses_main_application_template
