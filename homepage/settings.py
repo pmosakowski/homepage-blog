@@ -14,10 +14,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CONFIG_DIR = os.path.dirname(os.path.realpath(__file__ )) 
-PWD = os.path.dirname(CONFIG_DIR)
 
-STATIC_ROOT = os.path.join(PWD,'static')
+STATIC_ROOT = os.path.join(BASE_DIR,'static')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
