@@ -1,4 +1,4 @@
-#!/home/mosaq/virtualenv/python3-django/bin/python
+#!/usr/bin/env python3
 import os
 import sys
 
