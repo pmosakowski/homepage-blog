@@ -1,15 +1,28 @@
+"""
+Top level views for a homepage.
+"""
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 
 from mainpage.forms import LoginForm
 
 def main_page(request):
+    """
+    Displays main page template.
+    """
     return render(request,'mainpage/main.html')
 
 def about_page(request):
+    """
+    Displays about page.
+    """
     return render(request,'mainpage/about.html')
 
 def login_page(request):
+    """
+    Displays a login form and processes it on submission.
+    """
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         
@@ -29,5 +42,8 @@ def login_page(request):
     return render(request,'mainpage/login.html',{'form': login_form})
 
 def logout_page(request):
+    """
+    A view for signing a user out..
+    """
     logout(request)
     return redirect('/')
