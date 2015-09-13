@@ -1,5 +1,5 @@
 from django import forms
-from django.core import mail
+from django.contrib.auth.models import User
 
 class ContactForm(forms.Form):
     subject = forms.CharField(max_length=256)
@@ -7,11 +7,9 @@ class ContactForm(forms.Form):
     contact_email = forms.EmailField(max_length=256)
 
     def send_email(self):
-        mail.send_mail(
+        contact = User.objects.get(username='contact')
+
+        contact.email_user(
                 self.cleaned_data['subject'],
                 self.cleaned_data['message'],
-                self.cleaned_data['contact_email'],
-                ['admin@example.com'],
-                fail_silently = False
-        )
-        pass
+                self.cleaned_data['contact_email'])

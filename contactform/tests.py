@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.core import mail
+from django.contrib.auth.models import User
 
 from django.template.loader import render_to_string
 from django.core.urlresolvers import resolve
@@ -10,6 +11,9 @@ from .views import ContactFormView, ThanksView
 from .forms import ContactForm
 
 class ContactFormTest(TestCase):
+    def setUp(self):
+        User.objects.create_user('contact', 'contact@example.com','kibbles', first_name='Mister', last_name='Contact')
+
     def test_url_resolves_to_contact_form_view(self):
         view = resolve('/contact/')
 
