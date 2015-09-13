@@ -16,6 +16,9 @@ class VisitorTest(LiveServerTestCase):
         self.browser = webdriver.Firefox(firefox_profile=self.profile,firefox_binary=self.firefox_esr_binary)
         self.browser.implicitly_wait(3)
 
+        # create user that will receive our message
+        User.objects.create_user('contact', 'contact@example.com','password1', first_name='Mister', last_name='Contact')
+
     def tearDown(self):
         self.browser.quit()
 
