@@ -1,0 +1,6 @@
+Django==1.8.4
+django-markdown-deux==1.0.5
+markdown2==2.3.0
+pytz==2015.6
+selenium==2.47.1
+wheel==0.24.0
